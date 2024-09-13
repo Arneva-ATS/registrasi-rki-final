@@ -321,7 +321,7 @@ class KoperasiController extends Controller
                 curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
                 curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
-                curl_setopt($curlHandle, CURLOPT_TIMEOUT,30);
+                curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
                 curl_setopt($curlHandle, CURLOPT_POST, 1);
                 curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
                     'userkey' => $userkey,
@@ -385,7 +385,7 @@ class KoperasiController extends Controller
             $userkey = 'edf78cfcaac1';
             $passkey = 'b4e14f4a4f695c1cd3f37259';
             $telepon = $request->nomorKetua;
-            $OTPmessage = 'Berikut nomor OTP untuk melanjutkan registrasi: ' . $otp;
+            $OTPmessage = 'Please input this number 385948.';
             $url = 'https://console.zenziva.net/masking/api/sendOTP/';
             $curlHandle = curl_init();
             curl_setopt($curlHandle, CURLOPT_URL, $url);
@@ -403,6 +403,7 @@ class KoperasiController extends Controller
             ));
             $results = json_decode(curl_exec($curlHandle), true);
             curl_close($curlHandle);
+
             $koperasiId = DB::table('tbl_koperasi')->insertGetId($koperasiData);
             if (!$koperasiId) {
                 throw new \Exception('Gagal Tambah Koperasi!');
