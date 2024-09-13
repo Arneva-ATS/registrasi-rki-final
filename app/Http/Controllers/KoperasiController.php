@@ -384,9 +384,9 @@ class KoperasiController extends Controller
             // Mail::to($request->email)->send(new LinkMail($details));
             $userkey = 'edf78cfcaac1';
             $passkey = 'b4e14f4a4f695c1cd3f37259';
-            $telepon = $request->nomorKetua;
-            $OTPmessage = 'Please input this number 385948.';
-            $url = 'https://console.zenziva.net/masking/api/sendOTP/';
+            $telepon = $request->nomerKetua;
+            $message = 'Hi John Doe, have a nice day.';
+            $url = 'https://console.zenziva.net/masking/api/sendsms/';
             $curlHandle = curl_init();
             curl_setopt($curlHandle, CURLOPT_URL, $url);
             curl_setopt($curlHandle, CURLOPT_HEADER, 0);
@@ -399,10 +399,11 @@ class KoperasiController extends Controller
                 'userkey' => $userkey,
                 'passkey' => $passkey,
                 'to' => $telepon,
-                'message' => $OTPmessage
+                'message' => $message
             ));
             $results = json_decode(curl_exec($curlHandle), true);
             curl_close($curlHandle);
+
 
             $koperasiId = DB::table('tbl_koperasi')->insertGetId($koperasiData);
             if (!$koperasiId) {
