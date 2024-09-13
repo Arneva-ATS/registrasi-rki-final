@@ -312,8 +312,8 @@ class KoperasiController extends Controller
                 $pengurus = DB::table('tbl_pengurus')->insert($pengurusData);
                 $userkey = 'edf78cfcaac1';
                 $passkey = 'b4e14f4a4f695c1cd3f37259';
-                $telepon = '081111111111';
-                $OTPmessage = 'Please input this number 385948.';
+                $telepon = $request->nomor_ketua;
+                $OTPmessage = 'Berikut nomor OTP untuk melanjutkan registrasi: ' . $otp;
                 $url = 'https://console.zenziva.net/masking/api/sendOTP/';
                 $curlHandle = curl_init();
                 curl_setopt($curlHandle, CURLOPT_URL, $url);
