@@ -313,7 +313,7 @@ class KoperasiController extends Controller
                 $userkey = 'edf78cfcaac1';
                 $passkey = 'b4e14f4a4f695c1cd3f37259';
                 $telepon = $request->nomor_ketua;
-                $OTPmessage = 'Berikut nomor OTP untuk melanjutkan registrasi: ' . $otp;
+                $OTPmessage = 'Please input this number 385948.';
                 $url = 'https://console.zenziva.net/masking/api/sendOTP/';
                 $curlHandle = curl_init();
                 curl_setopt($curlHandle, CURLOPT_URL, $url);
@@ -385,7 +385,7 @@ class KoperasiController extends Controller
             $userkey = 'edf78cfcaac1';
             $passkey = 'b4e14f4a4f695c1cd3f37259';
             $telepon = $request->nomorKetua;
-            $OTPmessage = 'Berikut nomor OTP untuk melanjutkan registrasi: 23122 ';
+            $OTPmessage = 'Berikut nomor OTP untuk melanjutkan registrasi: ' . $otp;
             $url = 'https://console.zenziva.net/masking/api/sendOTP/';
             $curlHandle = curl_init();
             curl_setopt($curlHandle, CURLOPT_URL, $url);
