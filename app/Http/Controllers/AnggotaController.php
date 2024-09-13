@@ -101,17 +101,37 @@ class AnggotaController extends Controller
                         'nis' => $nis,
                         'otp' => $otp,
                     ];
+                    $userkey = 'edf78cfcaac1';
+                    $passkey = 'b4e14f4a4f695c1cd3f37259';
+                    $telepon = $anggota['nomor_hp'];
+                    $OTPmessage = 'Berikut nomor OTP untuk melanjutkan registrasi: '. $otp;
+                    $url = 'https://console.zenziva.net/masking/api/sendOTP/';
+                    $curlHandle = curl_init();
+                    curl_setopt($curlHandle, CURLOPT_URL, $url);
+                    curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+                    curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+                    curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
+                    curl_setopt($curlHandle, CURLOPT_TIMEOUT,30);
+                    curl_setopt($curlHandle, CURLOPT_POST, 1);
+                    curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
+                        'userkey' => $userkey,
+                        'passkey' => $passkey,
+                        'to' => $telepon,
+                        'message' => $OTPmessage
+                    ));
+                    $results = json_decode(curl_exec($curlHandle), true);
+                    curl_close($curlHandle);
+                // $details = [
+                //     'title' => 'Link Registrasi',
+                //     'content' => 'Selamat! Akun koperasi anda berhasil terverifikasi',
+                //     'info' => 'Berikut link untuk melengkapi data koperasi Anda pada tautan dibawah ini:',
+                //     'link' => 'https://registrasiv2.rkicoop.co.id/registrasi/koperasi/',
+                //     'logo_rki' => 'https://rkicoop.co.id/assets/imgs/Logo.png',
+                //     'logo_background' => 'https://rkicoop.co.id/assets/imgs/pattern_3.svg',
+                // ];
 
-                $details = [
-                    'title' => 'Link Registrasi',
-                    'content' => 'Selamat! Akun koperasi anda berhasil terverifikasi',
-                    'info' => 'Berikut link untuk melengkapi data koperasi Anda pada tautan dibawah ini:',
-                    'link' => 'https://registrasiv2.rkicoop.co.id/registrasi/koperasi/',
-                    'logo_rki' => 'https://rkicoop.co.id/assets/imgs/Logo.png',
-                    'logo_background' => 'https://rkicoop.co.id/assets/imgs/pattern_3.svg',
-                ];
-
-                Mail::to($anggota['email'])->send(new LinkMail($details));
+                // Mail::to($anggota['email'])->send(new LinkMail($details));
                 $anggotaId = DB::table('tbl_anggota')->insertGetId($anggotaData);
                 if (!$anggotaId) {
                     throw new \Exception('Gagal Tambah Anggota!');

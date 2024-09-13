@@ -267,7 +267,7 @@ class KoperasiController extends Controller
             foreach ($request->koperasiData as $koperasi) {
                 $nis = $request->nis . '-' . str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
                 $otp = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
-                if($id_tingkat == '2'){
+                if ($id_tingkat == '2') {
                     $koperasiData = [
                         'nama_koperasi' => $koperasi['nama_koperasi'],
                         'email_koperasi' => $koperasi['email_koperasi'],
@@ -276,7 +276,7 @@ class KoperasiController extends Controller
                         'nis' => $nis,
                         'otp' => $otp,
                     ];
-                } else if($id_tingkat=='3'){
+                } else if ($id_tingkat == '3') {
                     $koperasiData = [
                         'nama_koperasi' => $koperasi['nama_koperasi'],
                         'email_koperasi' => $koperasi['email_koperasi'],
@@ -287,16 +287,16 @@ class KoperasiController extends Controller
                     ];
                 }
 
-                $details = [
-                    'title' => 'Link Registrasi',
-                    'content' => 'Selamat! Akun koperasi anda berhasil terverifikasi',
-                    'info' => 'Berikut link untuk melengkapi data koperasi Anda pada tautan dibawah ini:',
-                    'link' => 'https://registrasiv2.rkicoop.co.id/registrasi/koperasi/',
-                    'logo_rki' => 'https://rkicoop.co.id/assets/imgs/Logo.png',
-                    'logo_background' => 'https://rkicoop.co.id/assets/imgs/pattern_3.svg',
-                ];
+                // $details = [
+                //     'title' => 'Link Registrasi',
+                //     'content' => 'Selamat! Akun koperasi anda berhasil terverifikasi',
+                //     'info' => 'Berikut link untuk melengkapi data koperasi Anda pada tautan dibawah ini:',
+                //     'link' => 'https://registrasiv2.rkicoop.co.id/registrasi/koperasi/',
+                //     'logo_rki' => 'https://rkicoop.co.id/assets/imgs/Logo.png',
+                //     'logo_background' => 'https://rkicoop.co.id/assets/imgs/pattern_3.svg',
+                // ];
 
-                Mail::to($koperasi['email_koperasi'])->send(new LinkMail($details));
+                // Mail::to($koperasi['email_koperasi'])->send(new LinkMail($details));
                 $koperasiId = DB::table('tbl_koperasi')->insertGetId($koperasiData);
                 if (!$koperasiId) {
                     throw new \Exception('Gagal Tambah Koperasi!');
@@ -310,7 +310,27 @@ class KoperasiController extends Controller
                 ];
 
                 $pengurus = DB::table('tbl_pengurus')->insert($pengurusData);
-
+                $userkey = 'edf78cfcaac1';
+                $passkey = 'b4e14f4a4f695c1cd3f37259';
+                $telepon = '081111111111';
+                $OTPmessage = 'Please input this number 385948.';
+                $url = 'https://console.zenziva.net/masking/api/sendOTP/';
+                $curlHandle = curl_init();
+                curl_setopt($curlHandle, CURLOPT_URL, $url);
+                curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+                curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+                curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
+                curl_setopt($curlHandle, CURLOPT_TIMEOUT,30);
+                curl_setopt($curlHandle, CURLOPT_POST, 1);
+                curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
+                    'userkey' => $userkey,
+                    'passkey' => $passkey,
+                    'to' => $telepon,
+                    'message' => $OTPmessage
+                ));
+                $results = json_decode(curl_exec($curlHandle), true);
+                curl_close($curlHandle);
                 if (!$pengurus) {
                     throw new \Exception('Gagal Tambah Ketua!');
                 }
@@ -353,15 +373,36 @@ class KoperasiController extends Controller
                 'nis' => $nis,
                 'otp' => $otp,
             ];
-            $details = [
-                'title' => 'Link Registrasi',
-                'content' => 'Selamat! Akun koperasi anda berhasil terverifikasi',
-                'info' => 'Berikut link untuk melengkapi data koperasi Anda pada tautan dibawah ini:',
-                'link' => 'https://registrasiv2.rkicoop.co.id/registrasi/koperasi/',
-                'logo_rki' => 'https://rkicoop.co.id/assets/imgs/Logo.png',
-                'logo_background' => 'https://rkicoop.co.id/assets/imgs/pattern_3.svg',
-            ];
-            Mail::to($request->email)->send(new LinkMail($details));
+            // $details = [
+            //     'title' => 'Link Registrasi',
+            //     'content' => 'Selamat! Akun koperasi anda berhasil terverifikasi',
+            //     'info' => 'Berikut link untuk melengkapi data koperasi Anda pada tautan dibawah ini:',
+            //     'link' => 'https://registrasiv2.rkicoop.co.id/registrasi/koperasi/',
+            //     'logo_rki' => 'https://rkicoop.co.id/assets/imgs/Logo.png',
+            //     'logo_background' => 'https://rkicoop.co.id/assets/imgs/pattern_3.svg',
+            // ];
+            // Mail::to($request->email)->send(new LinkMail($details));
+            $userkey = 'edf78cfcaac1';
+            $passkey = 'b4e14f4a4f695c1cd3f37259';
+            $telepon = $request->nomorKetua;
+            $OTPmessage = 'Berikut nomor OTP untuk melanjutkan registrasi: ' . $otp;
+            $url = 'https://console.zenziva.net/masking/api/sendOTP/';
+            $curlHandle = curl_init();
+            curl_setopt($curlHandle, CURLOPT_URL, $url);
+            curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+            curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
+            curl_setopt($curlHandle, CURLOPT_POST, 1);
+            curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
+                'userkey' => $userkey,
+                'passkey' => $passkey,
+                'to' => $telepon,
+                'message' => $OTPmessage
+            ));
+            $results = json_decode(curl_exec($curlHandle), true);
+            curl_close($curlHandle);
             $koperasiId = DB::table('tbl_koperasi')->insertGetId($koperasiData);
             if (!$koperasiId) {
                 throw new \Exception('Gagal Tambah Koperasi!');
@@ -383,6 +424,7 @@ class KoperasiController extends Controller
             return response()->json([
                 'response_code' => "00",
                 'response_message' => 'Sukses simpan data!',
+                'results' => $results
             ], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
