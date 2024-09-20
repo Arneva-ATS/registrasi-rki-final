@@ -331,27 +331,53 @@ class KoperasiController extends Controller
                 // ====================================================================================================================================
                 // Syntax Pengiriman OTP Zenziva
                 // ====================================================================================================================================
-                $userkey = 'edf78cfcaac1';
-                $passkey = 'b4e14f4a4f695c1cd3f37259';
-                $telepon = $koperasi['nomor_ketua'];
-                $OTPmessage = 'Berikut nomor OTP untuk melanjutkan registrasi: '. $otp;
-                $url = 'https://console.zenziva.net/masking/api/sendOTP/';
-                $curlHandle = curl_init();
-                curl_setopt($curlHandle, CURLOPT_URL, $url);
-                curl_setopt($curlHandle, CURLOPT_HEADER, 0);
-                curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
-                curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
-                curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
-                curl_setopt($curlHandle, CURLOPT_POST, 1);
-                curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
-                    'userkey' => $userkey,
-                    'passkey' => $passkey,
-                    'to' => $telepon,
-                    'message' => $OTPmessage
-                ));
-                $results = json_decode(curl_exec($curlHandle), true);
-                curl_close($curlHandle);
+                if ($id_tingkat == '2') {
+                    $userkey = 'edf78cfcaac1';
+                    $passkey = 'b4e14f4a4f695c1cd3f37259';
+                    $telepon = $koperasi['nomor_ketua'];
+                    $OTPmessage = 'Berikut OTP registrasi Anda: '. $otp . "Gunakan Link berikut untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/puskop/". $nis;
+                    $url = 'https://console.zenziva.net/masking/api/sendOTP/';
+                    $curlHandle = curl_init();
+                    curl_setopt($curlHandle, CURLOPT_URL, $url);
+                    curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+                    curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+                    curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
+                    curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
+                    curl_setopt($curlHandle, CURLOPT_POST, 1);
+                    curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
+                        'userkey' => $userkey,
+                        'passkey' => $passkey,
+                        'to' => $telepon,
+                        'message' => $OTPmessage
+                    ));
+                    $results = json_decode(curl_exec($curlHandle), true);
+                    curl_close($curlHandle);
+                    // Jika tingkatan koperasinya primkop
+                } else if ($id_tingkat == '3') {
+                    $userkey = 'edf78cfcaac1';
+                    $passkey = 'b4e14f4a4f695c1cd3f37259';
+                    $telepon = $koperasi['nomor_ketua'];
+                    $OTPmessage = 'Berikut OTP registrasi Anda: '. $otp . "Gunakan Link berikut untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/primkop/". $nis;
+                    $url = 'https://console.zenziva.net/masking/api/sendOTP/';
+                    $curlHandle = curl_init();
+                    curl_setopt($curlHandle, CURLOPT_URL, $url);
+                    curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+                    curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+                    curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
+                    curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
+                    curl_setopt($curlHandle, CURLOPT_POST, 1);
+                    curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
+                        'userkey' => $userkey,
+                        'passkey' => $passkey,
+                        'to' => $telepon,
+                        'message' => $OTPmessage
+                    ));
+                    $results = json_decode(curl_exec($curlHandle), true);
+                    curl_close($curlHandle);
+                }
+
                 // ====================================================================================================================================
                 // End Pengiriman OTP
                 // ====================================================================================================================================
@@ -407,7 +433,7 @@ class KoperasiController extends Controller
             $userkey = 'edf78cfcaac1';
             $passkey = 'b4e14f4a4f695c1cd3f37259';
             $telepon =  $request->nomerKetua;
-            $OTPmessage = 'Berikut nomor OTP untuk melanjutkan registrasi: '. $otp;
+            $OTPmessage = 'Berikut OTP registrasi Anda: '. $otp . "/nGunakan Link berikut untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/inkop/". $nis;
             $url = 'https://console.zenziva.net/masking/api/sendOTP/';
             $curlHandle = curl_init();
             curl_setopt($curlHandle, CURLOPT_URL, $url);
