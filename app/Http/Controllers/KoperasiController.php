@@ -222,7 +222,7 @@ class KoperasiController extends Controller
 
             $userkey = 'edf78cfcaac1';
             $passkey = 'b4e14f4a4f695c1cd3f37259';
-            $telepon = $request->pengurusData['nomor_hp'];
+            $telepon = $request->pengurusData[0]['nomor_hp'];
             $message = "Selamat koperasi Anda berhasil terverifikasi. Berikut username dan password untuk login:\nusername: " . $username . "\npassword: " . $password;
             $url = 'https://console.zenziva.net/masking/api/sendsms/';
             $curlHandle = curl_init();
