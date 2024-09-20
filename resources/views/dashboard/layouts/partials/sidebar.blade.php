@@ -94,19 +94,19 @@
                     </li>
 
                     @if($tingkatan == 'rki')
-                    <li>
+                    {{-- <li>
                         <a href="#side-pengajuan" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('view-pengajuan') ? 'true' : 'false' }}" class="dropdown-toggle"> Pengajuan <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg> </a>
                         <ul class="list-unstyled sub-submenu collapse {{ request()->routeIs('view-pengajuan') ? 'show' : '' }}" id="side-pengajuan" data-bs-parent="#pages" style="">
                             <li class="{{ request()->routeIs('view-pengajuan') ? 'active' : '' }}">
                                 <a href="{{ route('view-pengajuan') }}"> Pengajuan </a>
                             </li>
                         </ul>
-                    </li>
+                    </li> --}}
                     @endif
                 </ul>
                 @if($tingkatan != 'rki' && $tingkatan != 'anggota')
 
-                <ul class="submenu list-unstyled collapse {{ request()->routeIs(['view-inkop', 'view-puskop', 'view-primkop', 'view-anggota', 'view-kategori','view-produk']) ? 'show' : '' }}" id="side-data" data-bs-parent="#accordionExample" style="">
+                {{-- <ul class="submenu list-unstyled collapse {{ request()->routeIs(['view-inkop', 'view-puskop', 'view-primkop', 'view-anggota', 'view-kategori','view-produk']) ? 'show' : '' }}" id="side-data" data-bs-parent="#accordionExample" style="">
                     <li>
                         <a href="#product-cooperative" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs(['view-kategori', 'view-produk']) ? 'true' : 'false' }}" class="dropdown-toggle"> Produk <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg> </a>
                         <ul class="list-unstyled sub-submenu collapse {{ request()->routeIs(['view-kategori', 'view-produk']) ? 'show' : '' }}" id="product-cooperative" data-bs-parent="#pages" style="">
@@ -126,11 +126,11 @@
                             </li> --}}
                         </ul>
                     </li>
-                </ul>
+                </ul> --}}
                 @endif
             </li>
             @if($tingkatan != 'rki' && $tingkatan != 'anggota')
-            <li class="menu {{ request()->routeIs(['view-pos','view-history-pos']) ? 'active' : '' }}">
+            {{-- <li class="menu {{ request()->routeIs(['view-pos','view-history-pos']) ? 'active' : '' }}">
                 <a href="#sales-data" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs(['view-pos','view-history-pos']) ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-briefcase"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
@@ -148,11 +148,11 @@
                         <a href="/history-pos" aria-expanded="{{ request()->routeIs(['view-pos','view-history-pos']) ? 'true' : 'false' }}" class="dropdown-toggle"> History POS <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg> </a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
             @endif
 
             @if($tingkatan != 'rki' && $tingkatan != 'anggota')
-            <li class="menu {{ request()->routeIs(['view-inkop', 'view-puskop', 'view-primkop', 'view-anggota']) ? 'active' : '' }}">
+            {{-- <li class="menu {{ request()->routeIs(['view-inkop', 'view-puskop', 'view-primkop', 'view-anggota']) ? 'active' : '' }}">
                 <a href="#simpin-data" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs(['view-inkop', 'view-puskop', 'view-primkop', 'view-anggota']) ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-briefcase"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
@@ -170,11 +170,11 @@
                         <a href="/pinjaman" aria-expanded="{{ request()->routeIs(['view-inkop', 'view-puskop', 'view-primkop', 'view-anggota']) ? 'true' : 'false' }}"> Pinjaman  </a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
             @endif
 
             @if($tingkatan == 'anggota')
-            <li class="menu {{ request()->routeIs('view-pos') ? 'active' : '' }}">
+            {{-- <li class="menu {{ request()->routeIs('view-pos') ? 'active' : '' }}">
                 <a href="/pos" aria-expanded="false" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-briefcase"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
@@ -197,7 +197,7 @@
                         <span>Pinjaman</span>
                     </div>
                 </a>
-            </li>
+            </li> --}}
             @endif
 
         </ul>
