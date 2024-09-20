@@ -219,6 +219,29 @@ class KoperasiController extends Controller
             if (!$pengurus || !$pengawas) {
                 throw new \Exception('Gagal Tambah Anggota!');
             }
+
+            $userkey = 'edf78cfcaac1';
+            $passkey = 'b4e14f4a4f695c1cd3f37259';
+            $telepon = $request->pengurusData['nomor_hp'];
+            $message = "Selamat koperasi Anda berhasil terverifikasi. Berikut username dan password untuk login:\nusername: " . $username . "\npassword: " . $password;
+            $url = 'https://console.zenziva.net/masking/api/sendsms/';
+            $curlHandle = curl_init();
+            curl_setopt($curlHandle, CURLOPT_URL, $url);
+            curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+            curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
+            curl_setopt($curlHandle, CURLOPT_POST, 1);
+            curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
+                'userkey' => $userkey,
+                'passkey' => $passkey,
+                'to' => $telepon,
+                'message' => $message
+            ));
+            $results = json_decode(curl_exec($curlHandle), true);
+            curl_close($curlHandle);
+
             DB::commit();
             return response()->json([
                 'response_code' => "00",
@@ -335,7 +358,7 @@ class KoperasiController extends Controller
                     $userkey = 'edf78cfcaac1';
                     $passkey = 'b4e14f4a4f695c1cd3f37259';
                     $telepon = $koperasi['nomor_ketua'];
-                    $OTPmessage = 'Berikut OTP registrasi Anda: '. $otp . "Gunakan Link berikut untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/puskop/". $nis;
+                    $OTPmessage = 'Berikut OTP registrasi Anda: ' . $otp . "\nGunakan Link berikut untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/puskop/" . $nis;
                     $url = 'https://console.zenziva.net/masking/api/sendOTP/';
                     $curlHandle = curl_init();
                     curl_setopt($curlHandle, CURLOPT_URL, $url);
@@ -358,7 +381,7 @@ class KoperasiController extends Controller
                     $userkey = 'edf78cfcaac1';
                     $passkey = 'b4e14f4a4f695c1cd3f37259';
                     $telepon = $koperasi['nomor_ketua'];
-                    $OTPmessage = 'Berikut OTP registrasi Anda: '. $otp . "Gunakan Link berikut untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/primkop/". $nis;
+                    $OTPmessage = 'Berikut OTP registrasi Anda: ' . $otp . "\nGunakan Link berikut untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/primkop/" . $nis;
                     $url = 'https://console.zenziva.net/masking/api/sendOTP/';
                     $curlHandle = curl_init();
                     curl_setopt($curlHandle, CURLOPT_URL, $url);
@@ -433,7 +456,7 @@ class KoperasiController extends Controller
             $userkey = 'edf78cfcaac1';
             $passkey = 'b4e14f4a4f695c1cd3f37259';
             $telepon =  $request->nomerKetua;
-            $OTPmessage = 'Berikut OTP registrasi Anda: '. $otp . "\nGunakan Link berikut untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/inkop/". $nis;
+            $OTPmessage = 'Berikut OTP registrasi Anda: ' . $otp . "\nGunakan Link berikut untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/inkop/" . $nis;
             $url = 'https://console.zenziva.net/masking/api/sendOTP/';
             $curlHandle = curl_init();
             curl_setopt($curlHandle, CURLOPT_URL, $url);

@@ -13,71 +13,71 @@ use Illuminate\Support\Facades\Session;
 class AnggotaController extends Controller
 {
     //
-    public function insert_anggota(Request $request)
-    {
-        DB::beginTransaction();
+    // public function insert_anggota(Request $request)
+    // {
+    //     DB::beginTransaction();
 
-        try {
-            $request->validate([
-                'no_anggota' => 'required',
-                'username' => 'required',
-                'nama_lengkap' => 'required',
-                'password' => 'required',
-                'confirmPassword' => 'required',
-                'email' => 'required',
-                'nis' => 'required',
-                'nomor_hp' => 'required',
-                'id_koperasi' => 'required'
-            ]);
-            if ($request->password != $request->confirmPassword) {
-                return response()->json([
-                    'response_code' => "01",
-                    'response_message' => 'Password Tidak Sama!',
-                ], 200);
-            }
-            $nis = $request->nis . '-' . str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
-            $anggotaData = [
-                'no_anggota' => $request->no_anggota,
-                'username' => $request->username,
-                'nama_lengkap' => $request->nama_lengkap,
-                'password' => $request->password,
-                'nomor_hp' => $request->nomor_hp,
-                'nis' => $nis,
-                'jabatan' => 'anggota',
-                'id_koperasi' => $request->id_koperasi,
-            ];
+    //     try {
+    //         $request->validate([
+    //             'no_anggota' => 'required',
+    //             'username' => 'required',
+    //             'nama_lengkap' => 'required',
+    //             'password' => 'required',
+    //             'confirmPassword' => 'required',
+    //             'email' => 'required',
+    //             'nis' => 'required',
+    //             'nomor_hp' => 'required',
+    //             'id_koperasi' => 'required'
+    //         ]);
+    //         if ($request->password != $request->confirmPassword) {
+    //             return response()->json([
+    //                 'response_code' => "01",
+    //                 'response_message' => 'Password Tidak Sama!',
+    //             ], 200);
+    //         }
+    //         $nis = $request->nis . '-' . str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
+    //         $anggotaData = [
+    //             'no_anggota' => $request->no_anggota,
+    //             'username' => $request->username,
+    //             'nama_lengkap' => $request->nama_lengkap,
+    //             'password' => $request->password,
+    //             'nomor_hp' => $request->nomor_hp,
+    //             'nis' => $nis,
+    //             'jabatan' => 'anggota',
+    //             'id_koperasi' => $request->id_koperasi,
+    //         ];
 
-            // Insert into tbl_anggota
-            $insert_anggota = DB::table('tbl_anggota')->insertGetId($anggotaData);
-            if (!$insert_anggota) {
-                return response()->json([
-                    'response_code' => "01",
-                    'response_message' => 'Gagal Tambah Anggota!',
-                ], 400);
-            }
-            $details = [
-                'title' => 'Link Registrasi',
-                'content' => 'Selamat! Akun anggota anda berhasil terverifikasi',
-                'info' => 'Berikut link untuk melengkapi data anggota Anda pada tautan dibawah ini:',
-                'link' => 'https://registrasiv2.rkicoop.co.id/pendaftaran/anggota/primkop/',
-                'logo_rki' => 'https://rkicoop.co.id/assets/imgs/Logo.png',
-                'logo_background' => 'https://rkicoop.co.id/assets/imgs/pattern_3.svg',
-            ];
-            Mail::to($request->email)->send(new LinkMail($details));
+    //         // Insert into tbl_anggota
+    //         $insert_anggota = DB::table('tbl_anggota')->insertGetId($anggotaData);
+    //         if (!$insert_anggota) {
+    //             return response()->json([
+    //                 'response_code' => "01",
+    //                 'response_message' => 'Gagal Tambah Anggota!',
+    //             ], 400);
+    //         }
+    //         $details = [
+    //             'title' => 'Link Registrasi',
+    //             'content' => 'Selamat! Akun anggota anda berhasil terverifikasi',
+    //             'info' => 'Berikut link untuk melengkapi data anggota Anda pada tautan dibawah ini:',
+    //             'link' => 'https://registrasiv2.rkicoop.co.id/pendaftaran/anggota/primkop/',
+    //             'logo_rki' => 'https://rkicoop.co.id/assets/imgs/Logo.png',
+    //             'logo_background' => 'https://rkicoop.co.id/assets/imgs/pattern_3.svg',
+    //         ];
+    //         Mail::to($request->email)->send(new LinkMail($details));
 
-            DB::commit();
-            return response()->json([
-                'response_code' => "00",
-                'response_message' => 'Sukses simpan data!',
-            ], 200);
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            return response()->json([
-                'response_code' => "01",
-                'response_message' => $th->getMessage(),
-            ], 500);
-        }
-    }
+    //         DB::commit();
+    //         return response()->json([
+    //             'response_code' => "00",
+    //             'response_message' => 'Sukses simpan data!',
+    //         ], 200);
+    //     } catch (\Throwable $th) {
+    //         DB::rollBack();
+    //         return response()->json([
+    //             'response_code' => "01",
+    //             'response_message' => $th->getMessage(),
+    //         ], 500);
+    //     }
+    // }
     public function insert_data_anggota(Request $request, $id_koperasi)
     {
         DB::beginTransaction();
@@ -306,7 +306,27 @@ class AnggotaController extends Controller
                     'response_message' => 'Gagal simpan data Pekerjaan!',
                 ], 400);
             }
-
+            $userkey = 'edf78cfcaac1';
+            $passkey = 'b4e14f4a4f695c1cd3f37259';
+            $telepon =  $request->nomor_hp;
+            $message = "Selamat data keanggotan Anda berhasil terverifikasi. Berikut username dan password untuk login:\nusername: " . $username . "\npassword: " . $password;
+            $url = 'https://console.zenziva.net/masking/api/sendsms/';
+            $curlHandle = curl_init();
+            curl_setopt($curlHandle, CURLOPT_URL, $url);
+            curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+            curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
+            curl_setopt($curlHandle, CURLOPT_POST, 1);
+            curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
+                'userkey' => $userkey,
+                'passkey' => $passkey,
+                'to' => $telepon,
+                'message' => $message
+            ));
+            $results = json_decode(curl_exec($curlHandle), true);
+            curl_close($curlHandle);
             DB::commit();
             return response()->json([
                 'response_code' => "00",
@@ -359,101 +379,101 @@ class AnggotaController extends Controller
         }
     }
 
-    public function update_anggota(Request $request, $id)
-    {
-        DB::beginTransaction();
+    // public function update_anggota(Request $request, $id)
+    // {
+    //     DB::beginTransaction();
 
-        try {
-            $request->validate([
-                'no_anggota' => 'required',
-                'nik' => 'required',
-                'nama_lengkap' => 'required',
-                'tempat_lahir' => 'required',
-                'username' => 'required',
-                'tanggal_lahir' => 'required|date',
-                'jenis_kelamin' => 'required',
-                'kelurahan' => 'required',
-                'kecamatan' => 'required',
-                'kota' => 'required',
-                'provinsi' => 'required',
-                'kode_pos' => 'required',
-                'agama' => 'required',
-                'status_pernikahan' => 'required',
-                'pekerjaan' => 'required',
-                'kewarganegaraan' => 'required',
-                'alamat' => 'required',
-                'nomor_hp' => 'required',
-                'email' => 'required|email',
-                'slug_url' => 'required',
-                'id_role' => 'required',
-                'id_koperasi' => 'required'
-            ]);
+    //     try {
+    //         $request->validate([
+    //             'no_anggota' => 'required',
+    //             'nik' => 'required',
+    //             'nama_lengkap' => 'required',
+    //             'tempat_lahir' => 'required',
+    //             'username' => 'required',
+    //             'tanggal_lahir' => 'required|date',
+    //             'jenis_kelamin' => 'required',
+    //             'kelurahan' => 'required',
+    //             'kecamatan' => 'required',
+    //             'kota' => 'required',
+    //             'provinsi' => 'required',
+    //             'kode_pos' => 'required',
+    //             'agama' => 'required',
+    //             'status_pernikahan' => 'required',
+    //             'pekerjaan' => 'required',
+    //             'kewarganegaraan' => 'required',
+    //             'alamat' => 'required',
+    //             'nomor_hp' => 'required',
+    //             'email' => 'required|email',
+    //             'slug_url' => 'required',
+    //             'id_role' => 'required',
+    //             'id_koperasi' => 'required'
+    //         ]);
 
-            // Convert Base64 to Image
-            // Simpan foto selfie
-            $selfie_base64 = $request->selfie;
-            $selfie_extension = 'png';
-            $selfie_name = time() . 'anggota.' . $selfie_extension;
-            $selfie_folder = '/anggota/selfie/';
-            $selfie_path = public_path() . $selfie_folder . $selfie_name;
-            // $logo_path = public_path().'/images' public_path($logo_folder . $logo_name);
-            file_put_contents($selfie_path, base64_decode($selfie_base64));
+    //         // Convert Base64 to Image
+    //         // Simpan foto selfie
+    //         $selfie_base64 = $request->selfie;
+    //         $selfie_extension = 'png';
+    //         $selfie_name = time() . 'anggota.' . $selfie_extension;
+    //         $selfie_folder = '/anggota/selfie/';
+    //         $selfie_path = public_path() . $selfie_folder . $selfie_name;
+    //         // $logo_path = public_path().'/images' public_path($logo_folder . $logo_name);
+    //         file_put_contents($selfie_path, base64_decode($selfie_base64));
 
-            // Simpan foto selfie
-            $ktp_base64 = $request->ktp;
-            $ktp_extension = 'png';
-            $ktp_name = time() . 'anggota.' . $ktp_extension;
-            $ktp_folder = '/anggota/ktp/';
-            $ktp_path = public_path() . $ktp_folder . $ktp_name;
-            // $logo_path = public_path().'/images' public_path($logo_folder . $logo_name);
-            file_put_contents($ktp_path, base64_decode($ktp_base64));
+    //         // Simpan foto selfie
+    //         $ktp_base64 = $request->ktp;
+    //         $ktp_extension = 'png';
+    //         $ktp_name = time() . 'anggota.' . $ktp_extension;
+    //         $ktp_folder = '/anggota/ktp/';
+    //         $ktp_path = public_path() . $ktp_folder . $ktp_name;
+    //         // $logo_path = public_path().'/images' public_path($logo_folder . $logo_name);
+    //         file_put_contents($ktp_path, base64_decode($ktp_base64));
 
-            // simpan url
-            $selfieUrl = $selfie_folder . $selfie_name;
-            $ktpUrl = $ktp_folder . $ktp_name;
-            $anggotaData = [
-                'no_anggota' => $request->no_anggota,
-                'nik' => $request->nik,
-                'nama_lengkap' => $request->nama_lengkap,
-                'username' => $request->username,
-                'tempat_lahir' => $request->tempat_lahir,
-                'tanggal_lahir' => $request->tanggal_lahir,
-                'jenis_kelamin' => $request->jenis_kelamin,
-                'id_kelurahan' => $request->kelurahan,
-                'id_kecamatan' => $request->kecamatan,
-                'id_kota' => $request->kota,
-                'id_provinsi' => $request->provinsi,
-                'kode_pos' => $request->kode_pos,
-                'agama' => $request->agama,
-                'status_pernikahan' => $request->status_pernikahan,
-                'pekerjaan' => $request->pekerjaan,
-                'kewarganegaraan' => $request->kewarganegaraan,
-                'alamat' => $request->alamat,
-                'nomor_hp' => $request->nomor_hp,
-                'email' => $request->email,
-                'selfie' => $selfieUrl,
-                'ktp' => $ktpUrl,
-                'id_koperasi' => $request->id_koperasi,
-                'id_role' => $request->id_role
-            ];
-            // Insert into tbl_anggota
-            $update_anggota = DB::table('tbl_anggota')->where('id', $id)->update($anggotaData);
-            if (!$update_anggota) {
-                throw new \Exception('Gagal Update Anggota!');
-            }
-            DB::commit();
-            return response()->json([
-                'response_code' => "00",
-                'response_message' => 'Sukses update data!',
-            ], 200);
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            return response()->json([
-                'response_code' => "01",
-                'response_message' => $th->getMessage(),
-            ], 400);
-        }
-    }
+    //         // simpan url
+    //         $selfieUrl = $selfie_folder . $selfie_name;
+    //         $ktpUrl = $ktp_folder . $ktp_name;
+    //         $anggotaData = [
+    //             'no_anggota' => $request->no_anggota,
+    //             'nik' => $request->nik,
+    //             'nama_lengkap' => $request->nama_lengkap,
+    //             'username' => $request->username,
+    //             'tempat_lahir' => $request->tempat_lahir,
+    //             'tanggal_lahir' => $request->tanggal_lahir,
+    //             'jenis_kelamin' => $request->jenis_kelamin,
+    //             'id_kelurahan' => $request->kelurahan,
+    //             'id_kecamatan' => $request->kecamatan,
+    //             'id_kota' => $request->kota,
+    //             'id_provinsi' => $request->provinsi,
+    //             'kode_pos' => $request->kode_pos,
+    //             'agama' => $request->agama,
+    //             'status_pernikahan' => $request->status_pernikahan,
+    //             'pekerjaan' => $request->pekerjaan,
+    //             'kewarganegaraan' => $request->kewarganegaraan,
+    //             'alamat' => $request->alamat,
+    //             'nomor_hp' => $request->nomor_hp,
+    //             'email' => $request->email,
+    //             'selfie' => $selfieUrl,
+    //             'ktp' => $ktpUrl,
+    //             'id_koperasi' => $request->id_koperasi,
+    //             'id_role' => $request->id_role
+    //         ];
+    //         // Insert into tbl_anggota
+    //         $update_anggota = DB::table('tbl_anggota')->where('id', $id)->update($anggotaData);
+    //         if (!$update_anggota) {
+    //             throw new \Exception('Gagal Update Anggota!');
+    //         }
+    //         DB::commit();
+    //         return response()->json([
+    //             'response_code' => "00",
+    //             'response_message' => 'Sukses update data!',
+    //         ], 200);
+    //     } catch (\Throwable $th) {
+    //         DB::rollBack();
+    //         return response()->json([
+    //             'response_code' => "01",
+    //             'response_message' => $th->getMessage(),
+    //         ], 400);
+    //     }
+    // }
 
     public function list_anggota()
     {
