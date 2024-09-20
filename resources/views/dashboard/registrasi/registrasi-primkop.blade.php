@@ -1659,7 +1659,7 @@
             const jsondata = {
                 singkatan_koperasi,
                 nama_koperasi,
-                pengurusData: pengurusData.slice(1),
+                pengurusData: pengurusData,
                 pengawasData,
                 email,
                 no_telp,

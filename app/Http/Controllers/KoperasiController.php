@@ -199,11 +199,12 @@ class KoperasiController extends Controller
             if (!$koperasiId) {
                 throw new \Exception('Gagal Tambah Koperasi!');
             }
-
+            $pengurusData = array_slice($request->pengurusData, 1); // Memotong array data pengawas index 0
+            $pengawasData = array_slice($request->pengawasData, 1); // Memotong array data pengawas index 0
             // Insert data pengurus
-            $pengurus = DB::table('tbl_pengurus')->insert($request->pengurusData);
+            $pengurus = DB::table('tbl_pengurus')->insert($pengurusData);
             // Insert data pengawas
-            $pengawas = DB::table('tbl_pengawas')->insert($request->pengawasData);
+            $pengawas = DB::table('tbl_pengawas')->insert($pengawasData);
             // $details = [
             //     'title' => 'Link Registrasi',
             //     'content' => 'Selamat! Akun koperasi anda berhasil terverifikasi',
