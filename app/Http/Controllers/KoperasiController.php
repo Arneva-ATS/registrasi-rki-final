@@ -12,13 +12,12 @@ use Illuminate\Support\Facades\Session;
 
 class KoperasiController extends Controller
 {
-    //
+    //Update seluruh data koperasi
     public function update_koperasi_rki(Request $request, $id_koperasi)
     {
 
         DB::beginTransaction();
 
-        // Konversi Base64 ke file dan simpan di public path
         try {
             $request->validate([
                 'nama_koperasi' => 'required',
@@ -135,9 +134,8 @@ class KoperasiController extends Controller
             $dokumen_sertifikat_path = public_path() . $dokumen_sertifikat_folder . $dokumen_sertifikat_name;
             file_put_contents($dokumen_sertifikat_path, base64_decode($dokumen_sertifikat_base64));
 
-            // URL untuk disimpan di database
+            // URL atau path file untuk disimpan di database
             $logoUrl = $logo_folder . $logo_name;
-
             $npwpUrl = $npwp_folder . $npwp_name;
             $dokumenSIUPUrl = $dokumen_siup_folder . $dokumen_siup_name;
             $dokumenAktaPendirianUrl = $dokumen_akta_pendirian_folder . $dokumen_akta_pendirian_name;
@@ -149,6 +147,7 @@ class KoperasiController extends Controller
             $username = $request->singkatan_koperasi  . str_pad(rand(0, 2), 2, '0', STR_PAD_LEFT);
             $password = bin2hex(openssl_random_pseudo_bytes(10));
 
+            // Menyimpan seluruh data koperasi yang direquest kedalam array
             $koperasiData = [
                 'nama_koperasi' => $request->nama_koperasi,
                 'singkatan_koperasi' => $request->singkatan_koperasi,
@@ -193,29 +192,34 @@ class KoperasiController extends Controller
                 'doc_sertifikat_koperasi' => $dokumenSertifikatUrl,
             ];
 
+            // Mendapatkan id koperasi
             $koperasiId = DB::table('tbl_koperasi')->where('id', $id_koperasi)->update($koperasiData);
+
+            // Jika id koperasi tidak ditemukan
             if (!$koperasiId) {
                 throw new \Exception('Gagal Tambah Koperasi!');
             }
 
-
+            // Insert data pengurus
             $pengurus = DB::table('tbl_pengurus')->insert($request->pengurusData);
+            // Insert data pengawas
             $pengawas = DB::table('tbl_pengawas')->insert($request->pengawasData);
-            $details = [
-                'title' => 'Link Registrasi',
-                'content' => 'Selamat! Akun koperasi anda berhasil terverifikasi',
-                'info' => 'Berikut link untuk melengkapi data koperasi Anda pada tautan dibawah ini:',
-                'link' => 'https://registrasiv2.rkicoop.co.id/registrasi/koperasi/',
-                'logo_rki' => 'https://rkicoop.co.id/assets/imgs/Logo.png',
-                'logo_background' => 'https://rkicoop.co.id/assets/imgs/pattern_3.svg',
-            ];
+            // $details = [
+            //     'title' => 'Link Registrasi',
+            //     'content' => 'Selamat! Akun koperasi anda berhasil terverifikasi',
+            //     'info' => 'Berikut link untuk melengkapi data koperasi Anda pada tautan dibawah ini:',
+            //     'link' => 'https://registrasiv2.rkicoop.co.id/registrasi/koperasi/',
+            //     'logo_rki' => 'https://rkicoop.co.id/assets/imgs/Logo.png',
+            //     'logo_background' => 'https://rkicoop.co.id/assets/imgs/pattern_3.svg',
+            // ];
 
-            Mail::to($request->email)->send(new LinkMail($details));
+            // Mail::to($request->email)->send(new LinkMail($details));
+
+            // Jika gagal insert pengurus dan pengawas
             if (!$pengurus || !$pengawas) {
                 throw new \Exception('Gagal Tambah Anggota!');
             }
             DB::commit();
-
             return response()->json([
                 'response_code' => "00",
                 'response_message' => 'Sukses Simpan Data',
@@ -229,6 +233,8 @@ class KoperasiController extends Controller
             ], 400);
         }
     }
+
+    // Function untuk verifikasi otp koperasi
     public function verifikasi_otp($otp, $nis)
     {
         try {
@@ -252,7 +258,7 @@ class KoperasiController extends Controller
     }
 
 
-
+    // Function untuk insert koperasi puskop/primkop dari koperasi diatasnya
     public function insert_data_koperasi(Request $request, $id_koperasi, $id_tingkat)
     {
         DB::beginTransaction();
@@ -263,10 +269,13 @@ class KoperasiController extends Controller
                 'nis' => 'required',
             ]);
 
-
+            // Melakukan perulangan data-data koperasi
             foreach ($request->koperasiData as $koperasi) {
+                // Generate nis
                 $nis = $request->nis . '-' . str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
+                // Generate OTP
                 $otp = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
+                // Jika tingkatan koperasinya puskop
                 if ($id_tingkat == '2') {
                     $koperasiData = [
                         'nama_koperasi' => $koperasi['nama_koperasi'],
@@ -276,6 +285,7 @@ class KoperasiController extends Controller
                         'nis' => $nis,
                         'otp' => $otp,
                     ];
+                    // Jika tingkatan koperasinya primkop
                 } else if ($id_tingkat == '3') {
                     $koperasiData = [
                         'nama_koperasi' => $koperasi['nama_koperasi'],
@@ -297,19 +307,30 @@ class KoperasiController extends Controller
                 // ];
 
                 // Mail::to($koperasi['email_koperasi'])->send(new LinkMail($details));
+                // Insert data koperasi sekaligus mendapatkan id koperasinya
                 $koperasiId = DB::table('tbl_koperasi')->insertGetId($koperasiData);
+
+                // Jika insert gagal atau id koperasi tidak ditemukan
                 if (!$koperasiId) {
                     throw new \Exception('Gagal Tambah Koperasi!');
                 }
 
+                // Menjadikan data ketua dalam sebuah array
                 $pengurusData = [
                     'nama_pengurus' => $koperasi['nama_ketua'],
                     'nomor_hp' => $koperasi['nomor_ketua'],
                     'jabatan' => 'ketua',
                     'id_koperasi' => (int)$koperasiId,
                 ];
-
+                // Insert data ketua
                 $pengurus = DB::table('tbl_pengurus')->insert($pengurusData);
+                // Jika gagal insert pengurus ketua melempar pesan gagal
+                if (!$pengurus) {
+                    throw new \Exception('Gagal Tambah Ketua!');
+                }
+                // ====================================================================================================================================
+                // Syntax Pengiriman OTP Zenziva
+                // ====================================================================================================================================
                 $userkey = 'edf78cfcaac1';
                 $passkey = 'b4e14f4a4f695c1cd3f37259';
                 $telepon = $koperasi['nomor_ketua'];
@@ -331,9 +352,10 @@ class KoperasiController extends Controller
                 ));
                 $results = json_decode(curl_exec($curlHandle), true);
                 curl_close($curlHandle);
-                if (!$pengurus) {
-                    throw new \Exception('Gagal Tambah Ketua!');
-                }
+                // ====================================================================================================================================
+                // End Pengiriman OTP
+                // ====================================================================================================================================
+
             }
 
             DB::commit();
@@ -351,7 +373,7 @@ class KoperasiController extends Controller
         }
     }
 
-
+    // Function menambahkan inkop dari RKI
     public function insert_inkop(Request $request)
     {
 
@@ -384,9 +406,9 @@ class KoperasiController extends Controller
             // Mail::to($request->email)->send(new LinkMail($details));
             $userkey = 'edf78cfcaac1';
             $passkey = 'b4e14f4a4f695c1cd3f37259';
-            $telepon = $request->nomerKetua;
-            $message = 'Berikut nomor OTP untuk melanjutkan registrasi: '. $otp;
-            $url = 'https://console.zenziva.net/masking/api/sendsms/';
+            $telepon =  $request->nomerKetua;
+            $OTPmessage = 'Berikut nomor OTP untuk melanjutkan registrasi: '. $otp;
+            $url = 'https://console.zenziva.net/masking/api/sendOTP/';
             $curlHandle = curl_init();
             curl_setopt($curlHandle, CURLOPT_URL, $url);
             curl_setopt($curlHandle, CURLOPT_HEADER, 0);
@@ -399,7 +421,7 @@ class KoperasiController extends Controller
                 'userkey' => $userkey,
                 'passkey' => $passkey,
                 'to' => $telepon,
-                'message' => $message
+                'message' => $OTPmessage
             ));
             $results = json_decode(curl_exec($curlHandle), true);
             curl_close($curlHandle);

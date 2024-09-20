@@ -30,30 +30,30 @@ Route::prefix('register')->group(function () {
     Route::post('/rki/primkop', function () {
         return "OK";
     });
-    Route::post("/rki/update-koperasi/{id_koperasi}", [KoperasiController::class, 'update_koperasi_rki']);
-    Route::post('/anggota/insert-anggota', [AnggotaController::class, 'insert_anggota']);
-    Route::post('/anggota/update-anggota/{id_anggota}', [AnggotaController::class, 'update_anggota']);
-    Route::post('/anggota/update-insert-anggota/{id_anggota}', [AnggotaController::class, 'update_insert_anggota']);
-    Route::post('/koperasi/insert-koperasi/{id_koperasi}/{tingkat}', [KoperasiController::class, 'insert_koperasi']);
-    Route::post('/data/koperasi/{id_koperasi}/{tingkat}', [KoperasiController::class, 'insert_data_koperasi']);
-    Route::post('/data/anggota/{id_koperasi}', [AnggotaController::class, 'insert_data_anggota']);
+    Route::post("/rki/update-koperasi/{id_koperasi}", [KoperasiController::class, 'update_koperasi_rki']); // Routing update data koperasi untuk melengkapi semua data
+    // Route::post('/anggota/insert-anggota', [AnggotaController::class, 'insert_anggota']);
+    // Route::post('/anggota/update-anggota/{id_anggota}', [AnggotaController::class, 'update_anggota']);
+    Route::post('/anggota/update-insert-anggota/{id_anggota}', [AnggotaController::class, 'update_insert_anggota']); // Routing update data anggota untuk melengkapi semua data anggota
+    // Route::post('/koperasi/insert-koperasi/{id_koperasi}/{tingkat}', [KoperasiController::class, 'insert_koperasi']);
+    Route::post('/data/koperasi/{id_koperasi}/{tingkat}', [KoperasiController::class, 'insert_data_koperasi']); // Routing insert atau menambahkan data-data puskop/primkop oleh koperasi diatasnya
+    Route::post('/data/anggota/{id_koperasi}', [AnggotaController::class, 'insert_data_anggota']); // Routing untuk Insert data anggota oleh primkop
 
-    Route::post('/koperasi/insert-induk', [KoperasiController::class, 'insert_inkop']);
+    Route::post('/koperasi/insert-induk', [KoperasiController::class, 'insert_inkop']); // Routing untuk insert atau menambahkan koperasi induk oleh RKI
 })->name('register');
 
-Route::get('/koperasi/verifikasi-otp/{otp}/{nis}', [KoperasiController::class, 'verifikasi_otp']);
-Route::get('/anggota/verifikasi-otp/{otp}/{nis}', [AnggotaController::class, 'verifikasi_otp']);
+Route::get('/koperasi/verifikasi-otp/{otp}/{nis}', [KoperasiController::class, 'verifikasi_otp']); // Verifikasi OTP yang diterima koperasi
+Route::get('/anggota/verifikasi-otp/{otp}/{nis}', [AnggotaController::class, 'verifikasi_otp']); // Verifikasi OTP yang diterima anggota
 
 Route::prefix('wilayah')->group(function () {
-    Route::get('/provinsi', [WilayahController::class, 'province']);
-    Route::get('/kota/{id_provinsi}', [WilayahController::class, 'city']);
-    Route::get('/kecamatan/{id_kota}', [WilayahController::class, 'district']);
-    Route::get('/kelurahan/{id_kecamatan}', [WilayahController::class, 'subdistrict']);
+    Route::get('/provinsi', [WilayahController::class, 'province']); // Routing menampilkan provinsi
+    Route::get('/kota/{id_provinsi}', [WilayahController::class, 'city']); // Routing menampilkan kota
+    Route::get('/kecamatan/{id_kota}', [WilayahController::class, 'district']); // Routing menampilkan kecamatan
+    Route::get('/kelurahan/{id_kecamatan}', [WilayahController::class, 'subdistrict']); // Routing menampilkan kelurahan
 })->name('wilayah');
-Route::post('/approve/send-mail/anggota/{id}', [MailController::class, 'sendMailApproveAnggota']);
-Route::post('/approve/send-mail/koperasi/{id}', [MailController::class, 'sendMailApproveKoperasi']);
-Route::delete('/reject/send-mail/anggota/{id}', [MailController::class, 'sendMailRejectAnggota']);
-Route::delete('/reject/send-mail/koperasi/{id}', [MailController::class, 'sendMailRejectKoperasi']);
+// Route::post('/approve/send-mail/anggota/{id}', [MailController::class, 'sendMailApproveAnggota']);
+// Route::post('/approve/send-mail/koperasi/{id}', [MailController::class, 'sendMailApproveKoperasi']);
+// Route::delete('/reject/send-mail/anggota/{id}', [MailController::class, 'sendMailRejectAnggota']);
+// Route::delete('/reject/send-mail/koperasi/{id}', [MailController::class, 'sendMailRejectKoperasi']);
 
 // ============ Produk ================
 Route::prefix('products')->group(function () {
@@ -78,10 +78,10 @@ Route::prefix('pos')->group(function () {
 })->name('pos');
 // ============ End POS ================
 
-Route::get('/anggota/list/{no_anggota}/{id_koperasi}', [AnggotaController::class, 'show']);
+Route::get('/anggota/list/{no_anggota}/{id_koperasi}', [AnggotaController::class, 'show']); // Menampilkan data nggota sesuai dengan nomor anggota dan koperasinya
 // ============ Pengajuan Registrasi ================
-Route::post('/approve/send-mail/pengajuan/{id}', [MailController::class, 'sendMailApprovePengajuan']);
-Route::delete('/reject/send-mail/pengajuan/{id}', [MailController::class, 'sendMailRejectPengajuan']);
+// Route::post('/approve/send-mail/pengajuan/{id}', [MailController::class, 'sendMailApprovePengajuan']);
+// Route::delete('/reject/send-mail/pengajuan/{id}', [MailController::class, 'sendMailRejectPengajuan']);
 // ============ End Pengajuan Registrasi ================
 
 

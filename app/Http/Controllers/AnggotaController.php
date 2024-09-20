@@ -24,7 +24,7 @@ class AnggotaController extends Controller
                 'nama_lengkap' => 'required',
                 'password' => 'required',
                 'confirmPassword' => 'required',
-                'email' =>'required',
+                'email' => 'required',
                 'nis' => 'required',
                 'nomor_hp' => 'required',
                 'id_koperasi' => 'required'
@@ -92,36 +92,36 @@ class AnggotaController extends Controller
             foreach ($request->anggotaData as $anggota) {
                 $nis = $request->nis . '-' . str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
                 $otp = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
-                    $anggotaData = [
-                        'nama_lengkap' => $anggota['nama_anggota'],
-                        'email' => $anggota['email'],
-                        'nomor_hp' => $anggota['nomor_hp'],
-                        'no_anggota' => $anggota['no_anggota'],
-                        'id_koperasi' => $id_koperasi,
-                        'nis' => $nis,
-                        'otp' => $otp,
-                    ];
-                    $userkey = 'edf78cfcaac1';
-                    $passkey = 'b4e14f4a4f695c1cd3f37259';
-                    $telepon = $anggota['nomor_hp'];
-                    $OTPmessage = 'Berikut nomor OTP untuk melanjutkan registrasi: '. $otp;
-                    $url = 'https://console.zenziva.net/masking/api/sendOTP/';
-                    $curlHandle = curl_init();
-                    curl_setopt($curlHandle, CURLOPT_URL, $url);
-                    curl_setopt($curlHandle, CURLOPT_HEADER, 0);
-                    curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
-                    curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
-                    curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
-                    curl_setopt($curlHandle, CURLOPT_TIMEOUT,30);
-                    curl_setopt($curlHandle, CURLOPT_POST, 1);
-                    curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
-                        'userkey' => $userkey,
-                        'passkey' => $passkey,
-                        'to' => $telepon,
-                        'message' => $OTPmessage
-                    ));
-                    $results = json_decode(curl_exec($curlHandle), true);
-                    curl_close($curlHandle);
+                $anggotaData = [
+                    'nama_lengkap' => $anggota['nama_anggota'],
+                    'email' => $anggota['email'],
+                    'nomor_hp' => $anggota['nomor_hp'],
+                    'no_anggota' => $anggota['no_anggota'],
+                    'id_koperasi' => $id_koperasi,
+                    'nis' => $nis,
+                    'otp' => $otp,
+                ];
+                $userkey = 'edf78cfcaac1';
+                $passkey = 'b4e14f4a4f695c1cd3f37259';
+                $telepon =  $anggota['nomor_hp'];
+                $OTPmessage = 'Berikut nomor OTP untuk melanjutkan registrasi: ' . $otp;
+                $url = 'https://console.zenziva.net/masking/api/sendOTP/';
+                $curlHandle = curl_init();
+                curl_setopt($curlHandle, CURLOPT_URL, $url);
+                curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+                curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+                curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
+                curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
+                curl_setopt($curlHandle, CURLOPT_POST, 1);
+                curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
+                    'userkey' => $userkey,
+                    'passkey' => $passkey,
+                    'to' => $telepon,
+                    'message' => $OTPmessage
+                ));
+                $results = json_decode(curl_exec($curlHandle), true);
+                curl_close($curlHandle);
                 // $details = [
                 //     'title' => 'Link Registrasi',
                 //     'content' => 'Selamat! Akun koperasi anda berhasil terverifikasi',
