@@ -433,7 +433,7 @@ class KoperasiController extends Controller
             $userkey = 'edf78cfcaac1';
             $passkey = 'b4e14f4a4f695c1cd3f37259';
             $telepon =  $request->nomerKetua;
-            $OTPmessage = 'Berikut OTP registrasi Anda: '. $otp . "/nGunakan Link berikut untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/inkop/". $nis;
+            $OTPmessage = 'Berikut OTP registrasi Anda: '. $otp . "\nGunakan Link berikut untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/inkop/". $nis;
             $url = 'https://console.zenziva.net/masking/api/sendOTP/';
             $curlHandle = curl_init();
             curl_setopt($curlHandle, CURLOPT_URL, $url);
