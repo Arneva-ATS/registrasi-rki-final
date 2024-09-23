@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnggotaController;
+use App\Http\Controllers\BucketController;
 use App\Http\Controllers\KoperasiController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\Member\UserProfileController;
@@ -43,6 +44,7 @@ Route::prefix('register')->group(function () {
 
 Route::get('/koperasi/verifikasi-otp/{otp}/{nis}', [KoperasiController::class, 'verifikasi_otp']); // Verifikasi OTP yang diterima koperasi
 Route::get('/anggota/verifikasi-otp/{otp}/{nis}', [AnggotaController::class, 'verifikasi_otp']); // Verifikasi OTP yang diterima anggota
+Route::post('/file/upload', [BucketController::class, 'upload']);
 
 Route::prefix('wilayah')->group(function () {
     Route::get('/provinsi', [WilayahController::class, 'province']); // Routing menampilkan provinsi

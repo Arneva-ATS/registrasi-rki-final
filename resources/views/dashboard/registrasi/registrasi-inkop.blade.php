@@ -1385,108 +1385,238 @@
             pengawasData.splice(index, 1);
             renderPengawasList();
         }
+
         logoInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
+            const file = event.target.files[0]; // Ambil file yang dipilih
             if (file) {
+                // Buat pratinjau logo menggunakan FileReader
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    previewLogo.src = e.target.result;
-                    baseStringLogo = e.target.result;
-                    type3 = file.type.split('/')[1];
+                    previewLogo.src = e.target.result; // Tampilkan pratinjau logo
                 }
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(file); // Baca file untuk pratinjau
+
+                // Simpan tipe file (ekstensi)
+
+                // Siapkan FormData untuk mengunggah file ke server
+                const formData = new FormData();
+                formData.append('file', file); // Tambahkan file ke FormData
+
+                // Kirim file ke bucket storage melalui API Laravel
+                fetch('http://127.0.0.1:8000/api/file/upload', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('File uploaded successfully:', data);
+                        alert('File uploaded successfully!');
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('There was an error uploading the file.');
+                    });
             }
         });
+
         npwpInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
+            const file = event.target.files[0]; // Ambil file yang dipilih
             if (file) {
+                const formData = new FormData();
+                formData.append('file', file); // Tambahkan file ke FormData
+
+                // Tampilkan file untuk preview jika itu gambar
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    previewNpwp.src = e.target.result;
-                    baseStringNpwp = e.target.result;
-                    type4 = file.type.split('/')[1];
+                    previewNpwp.src = e.target.result; // Tampilkan pratinjau gambar
                 }
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(file); // Baca file untuk preview
+
+                // Upload file ke server menggunakan fetch
+                fetch('http://127.0.0.1:8000/api/file/upload', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('File uploaded successfully:', data);
+                    alert('File uploaded successfully!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error uploading the file.');
+                });
             }
         });
+
         documentSKK.addEventListener('change', () => {
-            const file = documentSKK.files[0];
+            const file = documentSKK.files[0]; // Ambil file yang dipilih
             if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    baseStringDokumenSKK = e.target.result;
-                    type4 = file.type.split('/')[1];
-                }
-                reader.readAsDataURL(file);
+                // Buat FormData untuk mengirim file ke server
+                const formData = new FormData();
+                formData.append('file', file); // Tambahkan file ke FormData
+
+                // Kirim file ke server melalui API Laravel atau Bucket Storage
+                fetch('http://127.0.0.1:8000/api/file/upload', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('File uploaded successfully:', data);
+                    alert('File uploaded successfully!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error uploading the file.');
+                });
             }
         });
 
         documentAktaPendirian.addEventListener('change', () => {
-            const file = documentAktaPendirian.files[0];
+            const file = documentAktaPendirian.files[0]; // Ambil file yang dipilih
             if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    baseStringDokumenAktaPendirian = e.target.result;
-                    type4 = file.type.split('/')[1];
-                }
-                reader.readAsDataURL(file);
+
+                // Buat FormData untuk mengirim file ke server
+                const formData = new FormData();
+                formData.append('file', file); // Tambahkan file ke FormData
+
+                // Kirim file ke server melalui API Laravel atau Bucket Storage
+                fetch('http://127.0.0.1:8000/api/file/upload', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('File uploaded successfully:', data);
+                    alert('File uploaded successfully!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error uploading the file.');
+                });
             }
         });
         documentAktaPerubahan.addEventListener('change', () => {
-            const file = documentAktaPerubahan.files[0];
+            const file = documentAktaPerubahan.files[0]; // Ambil file yang dipilih
             if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    baseStringDokumenAktaPerubahan = e.target.result;
-                    type4 = file.type.split('/')[1];
-                }
-                reader.readAsDataURL(file);
+
+                // Buat FormData untuk mengirim file ke server
+                const formData = new FormData();
+                formData.append('file', file); // Tambahkan file ke FormData
+
+                // Kirim file ke server melalui API Laravel atau Bucket Storage
+                fetch('http://127.0.0.1:8000/api/file/upload', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('File uploaded successfully:', data);
+                    alert('File uploaded successfully!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error uploading the file.');
+                });
             }
         });
 
         documentSIUP.addEventListener('change', () => {
-            const file = documentSIUP.files[0];
+            const file = documentSIUP.files[0]; // Ambil file yang dipilih
             if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    baseStringDokumenSIUP = e.target.result;
-                    type4 = file.type.split('/')[1];
-                }
-                reader.readAsDataURL(file);
+
+                // Buat FormData untuk mengirim file ke server
+                const formData = new FormData();
+                formData.append('file', file); // Tambahkan file ke FormData
+
+                // Kirim file ke server melalui API Laravel atau Bucket Storage
+                fetch('http://127.0.0.1:8000/api/file/upload', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('File uploaded successfully:', data);
+                    alert('File uploaded successfully!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error uploading the file.');
+                });
             }
         });
         documentSPKK.addEventListener('change', () => {
-            const file = documentSPKK.files[0];
+            const file = documentSPKK.files[0]; // Ambil file yang dipilih
             if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    baseStringDokumenSPKK = e.target.result;
-                    type4 = file.type.split('/')[1];
-                }
-                reader.readAsDataURL(file);
+
+                // Buat FormData untuk mengirim file ke server
+                const formData = new FormData();
+                formData.append('file', file); // Tambahkan file ke FormData
+
+                // Kirim file ke server melalui API Laravel atau Bucket Storage
+                fetch('http://127.0.0.1:8000/api/file/upload', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('File uploaded successfully:', data);
+                    alert('File uploaded successfully!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error uploading the file.');
+                });
             }
         });
         documentSKDU.addEventListener('change', () => {
-            const file = documentSKDU.files[0];
+            const file = documentSKDU.files[0]; // Ambil file yang dipilih
             if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    baseStringDokumenSKDU = e.target.result;
-                    type4 = file.type.split('/')[1];
-                }
-                reader.readAsDataURL(file);
+
+                // Buat FormData untuk mengirim file ke server
+                const formData = new FormData();
+                formData.append('file', file); // Tambahkan file ke FormData
+
+                // Kirim file ke server melalui API Laravel atau Bucket Storage
+                fetch('http://127.0.0.1:8000/api/file/upload', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('File uploaded successfully:', data);
+                    alert('File uploaded successfully!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error uploading the file.');
+                });
             }
         });
 
         documentSertifikat.addEventListener('change', () => {
-            const file = documentSertifikat.files[0];
+            const file = documentSertifikat.files[0]; // Ambil file yang dipilih
             if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    baseStringDokumenSertifikat = e.target.result;
-                    type4 = file.type.split('/')[1];
-                }
-                reader.readAsDataURL(file);
+
+                // Buat FormData untuk mengirim file ke server
+                const formData = new FormData();
+                formData.append('file', file); // Tambahkan file ke FormData
+
+                // Kirim file ke server melalui API Laravel atau Bucket Storage
+                fetch('http://127.0.0.1:8000/api/file/upload', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('File uploaded successfully:', data);
+                    alert('File uploaded successfully!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error uploading the file.');
+                });
             }
         });
 
@@ -1613,15 +1743,15 @@
             const no_pkp = document.getElementById("no_pkp").value;
             const no_sertifikat = document.getElementById("no_sertifikat").value;
 
-            const image_logo = baseStringLogo;
-            const image_npwp = baseStringNpwp;
-            const doc_sk_kemenkumham = baseStringDokumenSKK;
-            const doc_spkum = baseStringDokumenSPKK;
-            const doc_siup = baseStringDokumenSIUP;
-            const doc_sk_domisili = baseStringDokumenSKDU;
-            const doc_akta_pendirian = baseStringDokumenAktaPendirian;
-            const doc_akta_perubahan = baseStringDokumenAktaPerubahan;
-            const doc_sertifikat_koperasi = baseStringDokumenSertifikat;
+            // const image_logo = baseStringLogo;
+            // const image_npwp = baseStringNpwp;
+            // const doc_sk_kemenkumham = baseStringDokumenSKK;
+            // const doc_spkum = baseStringDokumenSPKK;
+            // const doc_siup = baseStringDokumenSIUP;
+            // const doc_sk_domisili = baseStringDokumenSKDU;
+            // const doc_akta_pendirian = baseStringDokumenAktaPendirian;
+            // const doc_akta_perubahan = baseStringDokumenAktaPerubahan;
+            // const doc_sertifikat_koperasi = baseStringDokumenSertifikat;
 
             const validLogo = logoInput.files[0];
             const validSKK = document.getElementById("doc_sk_kemenkumham").files[0];
@@ -1687,15 +1817,15 @@
                 no_npwp,
                 no_pkp,
                 no_sertifikat,
-                doc_sk_kemenkumham,
-                doc_spkum,
-                doc_siup,
-                doc_sk_domisili,
-                doc_akta_pendirian,
-                doc_akta_perubahan,
-                doc_sertifikat_koperasi,
-                logo: image_logo?.split(",")[1],
-                image_npwp: image_npwp?.split(",")[1],
+                // doc_sk_kemenkumham,
+                // doc_spkum,
+                // doc_siup,
+                // doc_sk_domisili,
+                // doc_akta_pendirian,
+                // doc_akta_perubahan,
+                // doc_sertifikat_koperasi,
+                // logo: image_logo?.split(",")[1],
+                // image_npwp: image_npwp?.split(",")[1],
             };
 
             console.log(jsondata);
