@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "nifty-episode-388406",
+  "private_key_id": "1b8a83fc7cb4c3ef5caf23afdbef89340d254f03",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDEP3k8pJrI0HWy\n4Vewc+H5CXMjO1p7zvj2NNSBF62XUlasAgAQ8ygxNX2VLYFYb4k2/k5/9IVxoEaZ\nTq/OsUdSjV7z+OmKldBcPrHR6+DA+OLun6q76MwhpEmTL0J/5SVa0smysoosed4U\nRYNzBur1xsGeIGbbn6AviOWkcaISDXAoxHoptnH5Tjp8v0NFZKHbgU6mCu+VmwhV\nBFJf26zCjQAUlSHPVETWD1MErxIsJ2CYSRo4Z1drHaa9CmE4WacxFf5PxxoR+iZE\n+FJU4mvmfti4xPCWWWdcgWZOfjdt2tLx/6sSP9H3AqzKsuCMx31DrvABM3ZoKNT4\nGITyL6J/AgMBAAECggEAVZNgKKOWo27ThDdjZ5yAs3n9bSWapVZxldsft1M97TiI\nduVAZiPCKQMsSfrX5lpsuUBXttBHyG6dmoiHfVgsw8DF4RlvrXD6tN7Z57I2BbAC\nNRAHAX3YVesv8jCvjNm9WkeEkJnuSsqxnqFZWrVvi9Ep6Ow0Lh0DWvcVPIoYpEnY\nHUkfgNrjKgTcu2RuwacafKKzlT3K8XtZcVYhgOuo7bXqw5D14Edr00Moj+DvRg5q\n0YFymaO+CQWZWndwoo+9mRrYgi56GBkxcZNPsFmSTiMEVSLP9bOKoXVqvlTqEvCy\nzKHWFyDeNB870UvsWpNNmRhtP1RZjwnlMMAycfLs8QKBgQDrzhJM7cxH0y0DIh6o\nAZQm7j9OHAP0ofUnT/q8DzlpQ6SvHf1QVB32k/3eyng7nfy0+i41c0AnEq2FVyWM\n4Ha4XrMKxq8e+Gx+cJ7q4YYmQgAx/1qaFFa/rVBcf/w5JZm7H9PNRc/dI5QNMufX\nIdT9tPvs0B6SKNSveOdwKcepbQKBgQDVDiFfnRrXh9xSrGcmIU9FBS7LWPF/W0no\nkvP0hnFWNJ7kin24R8zDJy+AIdXQNEkVbfHdhbpRJIDOiVef4raW9Gw3n+RKhAim\n9m+3SW0NqHXQhUmvdKG1j2iKNkeVecRPsE39W5OdbGKRCl4TVrSUVhW51BDjbcDt\n/NddnA1UGwKBgQCXJ19/xKdAG1QtP//avjhTxED8NuUqOW9GpfQZ/MBWg6/bOSQa\nC/GxECiaWbs8rAdDk2Nvi9NBuK1WXgiKB5DSmpG2hKnY9nHFkzerZKlzeLdbVU6k\nmgkJkXWD9d6eW0XyN3KzkN6v6JCM7WbD9sHrZ8pdgQM3ucisOppQwddk+QKBgH/f\nGTyvqDqPujaMbuQ9vbvpHmrBmUAc5EEIYg7y2fcpYew9CrOdtFG0pRe8Nv3dQ7fu\n4ulXp7mntP9BAyxc/8WeMY05E+V9VUwQQIC7Ow6lewCJ3u3FjIDR76Z0aYZXLPG/\nGS/k1LX5JTd0B36H3Z3iBOwhUXmOl+q+g+wVCxLdAoGAYNarv6rs5EvoQJYXCvjo\nmrZxCZHiRL4mLxXn+seLuF1ZSDJABlBzyiDGgqOIot/L0rCzBNqeGG3AHLlCwPsI\n6voMI7lO3gLuDsnDNuKg7IsTcLJLuInHoSuDKAlF08oJsKF5TWr2Wij4JNomUB9d\nrfVl9uTLSdOxsV2WLVisETw=\n-----END PRIVATE KEY-----\n",
+  "client_email": "arnevastorage@nifty-episode-388406.iam.gserviceaccount.com",
+  "client_id": "115070005837836496572",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/arnevastorage%40nifty-episode-388406.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

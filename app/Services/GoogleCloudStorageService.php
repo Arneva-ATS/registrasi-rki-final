@@ -14,7 +14,7 @@ class GoogleCloudStorageService
         // Inisialisasi StorageClient
         $this->storageClient = new StorageClient([
             'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-            'keyFilePath' => base_path('registrasi.json'),
+            'keyFilePath' => base_path('new-registrasi-key.json'),
         ]);
 
         // Ambil bucket yang dikonfigurasi
