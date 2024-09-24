@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Google\Cloud\Storage\StorageClient;
+use Exception;
 
 class GoogleCloudStorageService
 {
@@ -11,38 +12,84 @@ class GoogleCloudStorageService
 
     public function __construct()
     {
-        // Inisialisasi StorageClient
-        $this->storageClient = new StorageClient([
-            'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-            'keyFilePath' => base_path('new-registrasi-key.json'),
-        ]);
+        try {
+            // Inisialisasi StorageClient
+            $this->storageClient = new StorageClient([
+                'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
+                'keyFilePath' => base_path('google-bucket.json'),
+            ]);
 
-        // Ambil bucket yang dikonfigurasi
-        $this->bucket = $this->storageClient->bucket(env('GOOGLE_CLOUD_STORAGE_BUCKET'));
+            // Ambil bucket yang dikonfigurasi
+            $this->bucket = $this->storageClient->bucket(env('GOOGLE_CLOUD_STORAGE_BUCKET'));
+        } catch (Exception $e) {
+            throw new Exception("Failed to initialize Google Cloud Storage: " . $e->getMessage());
+        }
     }
 
     // Fungsi untuk upload file ke bucket
-    public function uploadFile($filePath, $fileName)
+    public function uploadFile($filePath, $destination)
     {
-        $file = fopen($filePath, 'r');
-        $object = $this->bucket->upload($file, [
-            'name' => $fileName,
-        ]);
+        try {
+            // Buka file
+            $file = fopen($filePath, 'r');
 
-        return $object->info();
+            if (!$file) {
+                throw new Exception("Failed to open file: " . $filePath);
+            }
+
+            // Upload file ke bucket dengan nama tujuan
+            $object = $this->bucket->upload($file, [
+                'name' => $destination, // Menyimpan file di bucket dengan path spesifik
+            ]);
+
+            // Tutup file handler jika dibuka dengan benar
+            if (is_resource($file)) {
+                fclose($file);
+            }
+
+            // Kembalikan informasi file yang diupload
+            return $object->info();
+
+        } catch (Exception $e) {
+            throw new Exception("File upload failed: " . $e->getMessage());
+        }
     }
 
     // Fungsi untuk download file dari bucket
     public function downloadFile($fileName, $destination)
     {
-        $object = $this->bucket->object($fileName);
-        $object->downloadToFile($destination);
+        try {
+            $object = $this->bucket->object($fileName);
+
+            // Periksa apakah file ada di bucket
+            if (!$object->exists()) {
+                throw new Exception("File does not exist in bucket: " . $fileName);
+            }
+
+            // Download file dari bucket ke lokasi tujuan
+            $object->downloadToFile($destination);
+            return true;
+        } catch (Exception $e) {
+            throw new Exception("File download failed: " . $e->getMessage());
+        }
     }
 
     // Fungsi untuk menghapus file dari bucket
     public function deleteFile($fileName)
     {
-        $object = $this->bucket->object($fileName);
-        $object->delete();
+        try {
+            $object = $this->bucket->object($fileName);
+
+            // Periksa apakah file ada sebelum dihapus
+            if (!$object->exists()) {
+                throw new Exception("File does not exist in bucket: " . $fileName);
+            }
+
+            // Hapus file dari bucket
+            $object->delete();
+            return true;
+        } catch (Exception $e) {
+            throw new Exception("File deletion failed: " . $e->getMessage());
+        }
     }
 }
