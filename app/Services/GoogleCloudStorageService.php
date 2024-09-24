@@ -92,4 +92,31 @@ class GoogleCloudStorageService
             throw new Exception("File deletion failed: " . $e->getMessage());
         }
     }
+
+    // Fungsi untuk generate Signed URL
+    public function generateSignedUrl($fileName, $expirationTime = '+1 hour')
+    {
+        try {
+            $object = $this->bucket->object($fileName);
+
+            // Periksa apakah file ada di bucket
+            if (!$object->exists()) {
+                throw new Exception("File does not exist in bucket: " . $fileName);
+            }
+
+            // Buat signed URL yang berlaku untuk durasi yang ditentukan
+            $signedUrl = $object->signedUrl(
+                new \DateTime($expirationTime), // Expiration time
+                [
+                    'version' => 'v4', // Menggunakan Signed URL versi 4
+                ]
+            );
+
+            // Kembalikan URL yang dapat digunakan untuk akses sementara
+            return $signedUrl;
+
+        } catch (Exception $e) {
+            throw new Exception("Failed to generate signed URL: " . $e->getMessage());
+        }
+    }
 }
