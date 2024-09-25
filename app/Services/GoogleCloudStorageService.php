@@ -94,7 +94,7 @@ class GoogleCloudStorageService
     }
 
     // Fungsi untuk generate Signed URL
-    public function generateSignedUrl($fileName, $expirationTime = '+1 hour')
+    public function generateSignedUrl($fileName, $expirationTime = '+5 minute')
     {
         try {
             $object = $this->bucket->object($fileName);

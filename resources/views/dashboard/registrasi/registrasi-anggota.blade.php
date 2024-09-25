@@ -187,7 +187,6 @@
                                                                             <input type="file" name="selfie"
                                                                                 id="selfie"
                                                                                 class="form-control form-control px-4 mb-3"
-                                                                                onchange="convertBase64selfie()"
                                                                                 style=" height: auto !important; padding-top: 15px !important; padding-bottom: 15px !important;"
                                                                                 accept="image/jpeg, image/png, image/jpg"
                                                                                 required />
@@ -200,7 +199,6 @@
                                                                                 id="ktp"
                                                                                 class="form-control px-4"
                                                                                 style="height: auto !important; padding-top: 15px !important; padding-bottom: 15px !important;"
-                                                                                onchange="convertBase64ktp()"
                                                                                 accept="image/jpeg, image/jpg, image/png"
                                                                                 required />
                                                                         </div>
@@ -841,8 +839,8 @@
 
     <script>
         let nis;
-        let baseStringSelfie;
-        let baseStringKtp;
+        let urlSelfie;
+        let urlKtp;
         let id_anggota;
         let id_koperasi;
         let anggotaKeluarga = [];
@@ -856,6 +854,8 @@
         const pendidikanTerakhir = document.getElementById('pendidikan_terakhir');
         const pendidikanSection1 = document.getElementById("pendidikanSection1")
         const pendidikanSection2 = document.getElementById("pendidikanSection2")
+        const selfieInput = document.getElementById('selfie');
+        const ktpInput = document.getElementById('ktp');
 
 
         window.addEventListener("load", () => {
@@ -1405,25 +1405,75 @@
             renderPendidikan();
         }
 
-        function convertBase64selfie() {
-            var fl = document.getElementById("selfie").files[0];
-            type1 = fl.type.split("/")[1];
-            var reader = new FileReader();
-            reader.onloadend = function() {
-                baseStringSelfie = reader.result;
-            };
-            reader.readAsDataURL(fl);
-        }
+        selfieInput.addEventListener('change', (event) => {
+            const file = event.target.files[0]; // Ambil file yang dipilih
+            if (file) {
+                // Buat pratinjau logo menggunakan FileReader
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewLogo.src = e.target.result; // Tampilkan pratinjau logo
+                }
+                reader.readAsDataURL(file); // Baca file untuk pratinjau
 
-        function convertBase64ktp() {
-            var flt = document.getElementById("ktp").files[0];
-            type2 = flt.type.split("/")[1];
-            var reader = new FileReader();
-            reader.onloadend = function() {
-                baseStringKtp = reader.result;
-            };
-            reader.readAsDataURL(flt);
-        }
+                // Simpan tipe file (ekstensi)
+
+                // Siapkan FormData untuk mengunggah file ke server
+                const formData = new FormData();
+                formData.append('file', file); // Tambahkan file ke FormData
+                formData.append('jenis','selfie');
+
+                // Kirim file ke bucket storage melalui API Laravel
+                fetch('http://127.0.0.1:8000/api/file/upload', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('File uploaded successfully:', data);
+                        alert('File uploaded successfully!');
+                        urlLogo = data.data.selfLink;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('There was an error uploading the file.');
+                    });
+            }
+        });
+
+        ktpInput.addEventListener('change', (event) => {
+            const file = event.target.files[0]; // Ambil file yang dipilih
+            if (file) {
+                // Buat pratinjau logo menggunakan FileReader
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewLogo.src = e.target.result; // Tampilkan pratinjau logo
+                }
+                reader.readAsDataURL(file); // Baca file untuk pratinjau
+
+                // Simpan tipe file (ekstensi)
+
+                // Siapkan FormData untuk mengunggah file ke server
+                const formData = new FormData();
+                formData.append('file', file); // Tambahkan file ke FormData
+                formData.append('jenis','ktp');
+
+                // Kirim file ke bucket storage melalui API Laravel
+                fetch('http://127.0.0.1:8000/api/file/upload', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('File uploaded successfully:', data);
+                        alert('File uploaded successfully!');
+                        urlLogo = data.data.selfLink;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('There was an error uploading the file.');
+                    });
+            }
+        });
 
 
         async function saveData() {
@@ -1450,8 +1500,8 @@
             var alamat = document.getElementById("alamat").value;
             var nomor_hp = document.getElementById("nomor_hp").value;
             var email = document.getElementById("email").value;
-            var image_selfie = baseStringSelfie;
-            var image_ktp = baseStringKtp;
+            var image_selfie = urlSelfie;
+            var image_ktp = urlKtp;
             var validselfie = document.getElementById("selfie").files[0];
             var validktp = document.getElementById("ktp").files[0];
 1            // Validasi input
@@ -1534,8 +1584,8 @@
                 anggotaKeluarga,
                 pendidikanData,
                 pekerjaanData,
-                selfie: image_selfie?.split(",")[1],
-                ktp: image_ktp?.split(",")[1],
+                selfie: image_selfie,
+                ktp: image_ktp,
                 id_koperasi: id_koperasi,
             };
 

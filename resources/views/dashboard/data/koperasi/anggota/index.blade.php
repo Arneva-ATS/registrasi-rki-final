@@ -40,8 +40,42 @@
                                     <button type="button" class="btn btn-warning"
                                         onclick="modalBtn({{ json_encode($data) }})" data-bs-toggle="modal"
                                         data-bs-target="#modalInkop" {{ $data->approval ? "" : "disabled" }}>Detail </button>
+                                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                                        data-bs-target="#modalDokumen{{ $data->id }}">Dokumen</button>
                                 </td>
                             </tr>
+                             <!-- Modal Dokumen untuk setiap koperasi -->
+                             <div class="modal fade" id="modalDokumen{{ $data->id }}" tabindex="-1"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-white" id="exampleModalLabel">Dokumen Anggota:
+                                                {{ $data->nama_lengkap }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <h3 class="text-white fs-5 mt-3">Pas Foto:</h3>
+                                                    <button class="btn btn-dark"
+                                                        onclick="selfieBtn({{ $data->id }})">Lihat</button>
+                                                </div>
+                                                <div class="col-6">
+                                                    <h3 class="text-white fs-5 mt-3">Foto KTP</h3>
+                                                    <button class="btn btn-dark"
+                                                        onclick="ktpBtn({{ $data->id }})">Lihat</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         @endforeach
                     </tbody>
                 </table>
@@ -229,5 +263,24 @@
 
         }
 
+        function selfieBtn(id) {
+            console.log(id)
+            fetch(`/api/anggota/data/${id}`)
+            .then(response=>response.json())
+            .then(data=>{
+                console.log(data);
+                window.open(data.response_message.selfie, 'selfieWindowed', 'width=800,height=600,top=100,left=100,resizable=yes');
+            })
+        }
+
+        function ktpBtn(id) {
+            console.log(id)
+            fetch(`/api/anggota/data/${id}`)
+            .then(response=>response.json())
+            .then(data=>{
+                console.log(data);
+                window.open(data.response_message.ktp, 'selfieWindowed', 'width=800,height=600,top=100,left=100,resizable=yes');
+            })
+        }
     </script>
 @endpush

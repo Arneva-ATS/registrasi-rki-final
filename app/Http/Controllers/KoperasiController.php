@@ -9,9 +9,29 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 use Illuminate\Support\Facades\Session;
+use App\Services\GoogleCloudStorageService;
 
 class KoperasiController extends Controller
 {
+    protected $gcsService;
+
+    public function __construct(GoogleCloudStorageService $gcsService)
+    {
+        $this->gcsService = $gcsService;
+    }
+    // Fungsi untuk mengambil signed URL dari link yang disimpan di database
+    private function generateSignedUrlFromLink($fileUrl)
+    {
+        // Ekstrak nama file dari URL (https://www.googleapis.com/storage/v1/b/registrasi/o/ diikuti oleh nama file)
+        $parsedUrl = parse_url($fileUrl);
+
+        // Decode path dan ambil bagian setelah "/o/" sebagai nama file
+        $filePath = urldecode(basename($parsedUrl['path']));
+
+        // Generate signed URL menggunakan nama file yang diekstrak
+        return $this->gcsService->generateSignedUrl($filePath);
+    }
+
     //Update seluruh data koperasi
     public function update_koperasi_rki(Request $request, $id_koperasi)
     {
@@ -49,7 +69,7 @@ class KoperasiController extends Controller
                 'no_npwp' => 'required',
                 'no_pkp' => 'required',
                 'no_sertifikat' => 'required',
-                'logo'=>'required',
+                'logo' => 'required',
                 'image_npwp' => 'required',
                 'doc_akta_pendirian' => 'required',
                 'doc_akta_perubahan' => 'required',
@@ -147,7 +167,9 @@ class KoperasiController extends Controller
             if (!$pengurus || !$pengawas) {
                 throw new \Exception('Gagal Tambah Anggota!');
             }
-
+            // ====================================================================================================================================
+            // Syntax Pengiriman OTP Zenziva
+            // ====================================================================================================================================
             $userkey = 'edf78cfcaac1';
             $passkey = 'b4e14f4a4f695c1cd3f37259';
             $telepon = $request->pengurusData[0]['nomor_hp'];
@@ -169,6 +191,9 @@ class KoperasiController extends Controller
             ));
             $results = json_decode(curl_exec($curlHandle), true);
             curl_close($curlHandle);
+            // ====================================================================================================================================
+            // End Pengiriman OTP
+            // ====================================================================================================================================
 
             DB::commit();
             return response()->json([
@@ -208,6 +233,39 @@ class KoperasiController extends Controller
         }
     }
 
+    //Function untuk mengambil url dokumen-dokumen tiap-tiap koperasi
+    public function data_koperasi($id)
+    {
+        try {
+            $koperasi = DB::table('tbl_koperasi')->where('id', $id)->first();
+            if (!$koperasi) {
+                return response()->json([
+                    'response_code' => "01",
+                    'response_message' => 'Koperasi Tidak Ditemukan!',
+                ], 400);
+            }
+            $documents = [
+                'logo' => $koperasi->image_logo ? $this->generateSignedUrlFromLink($koperasi->image_logo) : null,
+                'npwp' => $koperasi->image_npwp ? $this->generateSignedUrlFromLink($koperasi->image_npwp) : null,
+                'akta_pendirian' => $koperasi->doc_akta_pendirian ? $this->generateSignedUrlFromLink($koperasi->doc_akta_pendirian) : null,
+                'akta_perubahan' => $koperasi->doc_akta_perubahan ? $this->generateSignedUrlFromLink($koperasi->doc_akta_perubahan) : null,
+                'sk_kemenkumham' => $koperasi->doc_sk_kemenkumham ? $this->generateSignedUrlFromLink($koperasi->doc_sk_kemenkumham) : null,
+                'spkum' => $koperasi->doc_spkum ? $this->generateSignedUrlFromLink($koperasi->doc_spkum) : null,
+                'sk_domisili' => $koperasi->doc_sk_domisili ? $this->generateSignedUrlFromLink($koperasi->doc_sk_domisili) : null,
+                'siup' => $koperasi->doc_siup ? $this->generateSignedUrlFromLink($koperasi->doc_siup) : null,
+                'sertifikat' => $koperasi->doc_sertifikat_koperasi ? $this->generateSignedUrlFromLink($koperasi->doc_sertifikat_koperasi) : null,
+            ];
+            return response()->json([
+                'response_code' => "00",
+                'response_message' => $documents,
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'response_code' => "01",
+                'response_message' => $th->getMessage(),
+            ], 500);
+        }
+    }
 
     // Function untuk insert koperasi puskop/primkop dari koperasi diatasnya
     public function insert_data_koperasi(Request $request, $id_koperasi, $id_tingkat)
@@ -279,6 +337,7 @@ class KoperasiController extends Controller
                 if (!$pengurus) {
                     throw new \Exception('Gagal Tambah Ketua!');
                 }
+
                 // ====================================================================================================================================
                 // Syntax Pengiriman OTP Zenziva
                 // ====================================================================================================================================
@@ -381,6 +440,10 @@ class KoperasiController extends Controller
             //     'logo_background' => 'https://rkicoop.co.id/assets/imgs/pattern_3.svg',
             // ];
             // Mail::to($request->email)->send(new LinkMail($details));
+
+            // ====================================================================================================================================
+            // Syntax Pengiriman OTP Zenziva
+            // ====================================================================================================================================
             $userkey = 'edf78cfcaac1';
             $passkey = 'b4e14f4a4f695c1cd3f37259';
             $telepon =  $request->nomerKetua;
@@ -402,7 +465,9 @@ class KoperasiController extends Controller
             ));
             $results = json_decode(curl_exec($curlHandle), true);
             curl_close($curlHandle);
-
+            // ====================================================================================================================================
+            // End Pengiriman OTP
+            // ====================================================================================================================================
 
             $koperasiId = DB::table('tbl_koperasi')->insertGetId($koperasiData);
             if (!$koperasiId) {
@@ -469,8 +534,7 @@ class KoperasiController extends Controller
         $id_inkop = Session::get('id_inkop');
         $id_puskop = Session::get('id_puskop');
         $id_primkop = Session::get('id_primkop');
-        $list_inkop =  DB::table('tbl_koperasi')->join('tbl_pengurus', 'tbl_pengurus.id_koperasi', '=', 'tbl_koperasi.id')
-            ->where('id_tingkatan_koperasi', '=', 1)->get();
+        $list_inkop =  DB::table('tbl_koperasi')->where('id_tingkatan_koperasi', '=', 1)->get();
         return view('dashboard.data.koperasi.inkop.index', compact('id', 'username', 'password', 'tingkatan', 'list_inkop'));
     }
 

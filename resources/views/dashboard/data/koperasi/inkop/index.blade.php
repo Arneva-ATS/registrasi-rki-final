@@ -30,7 +30,7 @@
                             <tr>
                                 <td>#{{ $data->id }}</td>
                                 <td>{{ $data->nama_koperasi }}</td>
-                                <td>{{ $data->nomor_hp }}</td>
+                                <td>{{ $data->hp_wa }}</td>
                                 <td>{{ $data->email_koperasi }}</td>
                                 <td>{{ $data->bidang_koperasi }}</td>
                                 <td>{{ $data->approval ? 'Lengkap' : 'Tidak Lengkap' }}</td>
@@ -40,14 +40,93 @@
                                             onclick="modalBtn({{ json_encode($data) }})" data-bs-toggle="modal"
                                             data-bs-target="#modalInkop">Detail </button>
                                         <a href="/list_puskop_inkop/{{ $data->id }}" class="btn btn-info">Puskop </a>
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                                            data-bs-target="#modalDokumen{{ $data->id }}">Dokumen</button>
                                     @else
                                         <button type="button" class="btn btn-warning"
                                             onclick="modalBtn({{ json_encode($data) }})" data-bs-toggle="modal"
                                             data-bs-target="#modalInkop" disabled>Detail </button>
                                         <a href="/list_puskop_inkop/{{ $data->id }}" class="btn btn-info">Puskop </a>
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                                            data-bs-target="#modalDokumen{{ $data->id }}" disabled>Dokumen </button>
                                     @endif
                                 </td>
                             </tr>
+                            <!-- Modal Dokumen untuk setiap koperasi -->
+                            <div class="modal fade" id="modalDokumen{{ $data->id }}" tabindex="-1"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-white" id="exampleModalLabel">Dokumen Koperasi:
+                                                {{ $data->nama_koperasi }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <h3 class="text-white fs-5 mt-3">Logo:</h3>
+                                                    <button class="btn btn-dark"
+                                                        onclick="logoBtn({{ $data->id }})">Lihat</button>
+                                                </div>
+                                                <div class="col-6">
+                                                    <h3 class="text-white fs-5 mt-3">NPWP</h3>
+                                                    <button class="btn btn-dark"
+                                                        onclick="npwpBtn({{ $data->id }})">Lihat</button>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <h3 class="text-white fs-5 mt-3">Dokumen Akta Pendirian:</h3>
+                                                    <button class="btn btn-dark"
+                                                        onclick="aktaPendirianBtn({{ $data->id }})">Lihat</button>
+                                                </div>
+                                                <div class="col-6">
+                                                    <h3 class="text-white fs-5 mt-3">Dokumen Akta Perubahan:</h3>
+                                                    <button class="btn btn-dark"
+                                                        onclick="aktaPerubahanBtn({{ $data->id }})">Lihat</button>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <h3 class="text-white fs-5 mt-3">Dokumen SK Kemenkumham:</h3>
+                                                    <button class="btn btn-dark"
+                                                        onclick="skkBtn({{ $data->id }})">Lihat</button>
+                                                </div>
+                                                <div class="col-6">
+                                                    <h3 class="text-white fs-5 mt-3">Dokumen SPKUM:</h3>
+                                                    <button class="btn btn-dark"
+                                                        onclick="spkumBtn({{ $data->id }})">Lihat</button>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <h3 class="text-white fs-5 mt-3">Dokumen SK Domisili:</h3>
+                                                    <button class="btn btn-dark"
+                                                        onclick="skDomisiliBtn({{ $data->id }})">Lihat</button>
+                                                </div>
+                                                <div class="col-6">
+                                                    <h3 class="text-white fs-5 mt-3">Dokumen SIUP:</h3>
+                                                    <button class="btn btn-dark"
+                                                        onclick="siupBtn({{ $data->id }})">Lihat</button>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <h3 class="text-white fs-5 mt-3">Dokumen Sertifikat Koperasi:</h3>
+                                                    <button class="btn btn-dark"
+                                                        onclick="sertifikatBtn({{ $data->id }})">Lihat</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         @endforeach
                     </tbody>
                 </table>
@@ -58,7 +137,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title text-white" id="exampleModalLabel">Detail Koperasi</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div class="row">
@@ -203,34 +283,99 @@
             document.getElementById('no_npwp').innerText = data.no_npwp
             document.getElementById('no_pkp').innerText = data.no_pkp
             document.getElementById('no_sertifikat').innerText = data.no_sertifikat_koperasi
-
-
         }
-        //  $('#modalInkop').on('show.bs.modal', function(event) {
-        //     var button = $(event.relatedTarget); // Button that triggered the modal
-        //     var data = button.data('inkop'); // Extract info from data-* attributes
-        //     data = JSON.parse(data); // Parse the JSON string into an object
 
-        //     // var modal = $(this);
-        //     document.getElementById('nama_koperasi').innerText = data.nama_koperasi
-        //     document.getElementById('no_wa').innerText = data.hp_wa
-        //     document.getElementById('bidang_usaha').innerText = data.bidang_usaha
+        function logoBtn(id) {
+            console.log(id)
+            fetch(`/api/koperasi/data/${id}`)
+            .then(response=>response.json())
+            .then(data=>{
+                console.log(data);
+                window.open(data.response_message.logo, 'logoWindowed', 'width=800,height=600,top=100,left=100,resizable=yes');
+            })
+        }
 
+        function npwpBtn(id) {
+            console.log(id)
+            fetch(`/api/koperasi/data/${id}`)
+            .then(response=>response.json())
+            .then(data=>{
+                console.log(data);
+                window.open(data.response_message.npwp, 'npwpWindowed', 'width=800,height=600,top=100,left=100,resizable=yes');
+            })
+        }
 
-        // //     $('#nama_koperasi').text(data.nama_koperasi);
-        // //     $('#no_wa').text(data.hp_wa);
-        // //    $('#email').text(data.email_koperasi);
-        // //     $('#bidang_usaha').text(data.bidang_koperasi);
-        //     // Isi elemen lainnya dengan data yang sesuai
-        // });
-        // Trigger focus on the input when the modal is shown
-        // $('#modalInkop').on('shown.bs.modal', function(event) {
-        //     console.log(event)
-        //     $('#myInput').trigger('focus');
-        //     let data = JSON.parse(data);
-        //     document.getElementById('nama_koperasi').innerText = data.nama_koperasi
-        //     document.getElementById('no_wa').innerText = data.hp_wa
-        //     document.getElementById('bidang_usaha').innerText = data.bidang_usaha
-        // });
+        function aktaPendirianBtn(id) {
+            console.log(id)
+
+            fetch(`/api/koperasi/data/${id}`)
+            .then(response=>response.json())
+            .then(data=>{
+                console.log(data);
+                window.open(data.response_message.akta_pendirian, 'aktaPendirianWindowed', 'width=800,height=600,top=100,left=100,resizable=yes');
+            })
+        }
+
+        function aktaPerubahanBtn(id) {
+            console.log(id)
+
+            fetch(`/api/koperasi/data/${id}`)
+            .then(response=>response.json())
+            .then(data=>{
+                console.log(data);
+                window.open(data.response_message.akta_perubahan, 'aktaPerubahanWindowed', 'width=800,height=600,top=100,left=100,resizable=yes');
+            })
+        }
+
+        function skkBtn(id) {
+            console.log(id)
+            // var url = `/storage/sk-kemenkumham/${id}`;
+            fetch(`/api/koperasi/data/${id}`)
+            .then(response=>response.json())
+            .then(data=>{
+                console.log(data);
+                window.open(data.response_message.sk_kemenkumham, 'skkWindowed', 'width=800,height=600,top=100,left=100,resizable=yes');
+            })
+        }
+
+        function spkumBtn(id) {
+            console.log(id)
+            fetch(`/api/koperasi/data/${id}`)
+            .then(response=>response.json())
+            .then(data=>{
+                console.log(data);
+                window.open(data.response_message.spkum, 'spkumWindowed', 'width=800,height=600,top=100,left=100,resizable=yes');
+            })
+        }
+
+        function skDomisiliBtn(id) {
+            console.log(id)
+            fetch(`/api/koperasi/data/${id}`)
+            .then(response=>response.json())
+            .then(data=>{
+                console.log(data);
+                window.open(data.response_message.sk_domisili, 'skdWindowed', 'width=800,height=600,top=100,left=100,resizable=yes');
+            })
+        }
+
+        function siupBtn(id) {
+            console.log(id)
+            fetch(`/api/koperasi/data/${id}`)
+            .then(response=>response.json())
+            .then(data=>{
+                console.log(data);
+                window.open(data.response_message.siup, 'siupWindowed', 'width=800,height=600,top=100,left=100,resizable=yes');
+            })
+        }
+
+        function sertifikatBtn(id) {
+            console.log(id)
+            fetch(`/api/koperasi/data/${id}`)
+            .then(response=>response.json())
+            .then(data=>{
+                console.log(data);
+                window.open(data.response_message.sertifikat_koperasi, 'sertifikatWindowed', 'width=800,height=600,top=100,left=100,resizable=yes');
+            })
+        }
     </script>
 @endsection

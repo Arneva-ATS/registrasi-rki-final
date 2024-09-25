@@ -45,6 +45,8 @@ Route::prefix('register')->group(function () {
 Route::get('/koperasi/verifikasi-otp/{otp}/{nis}', [KoperasiController::class, 'verifikasi_otp']); // Verifikasi OTP yang diterima koperasi
 Route::get('/anggota/verifikasi-otp/{otp}/{nis}', [AnggotaController::class, 'verifikasi_otp']); // Verifikasi OTP yang diterima anggota
 Route::post('/file/upload', [BucketController::class, 'upload']);
+Route::get('/koperasi/data/{id}', [KoperasiController::class, 'data_koperasi']); // Verifikasi OTP yang diterima koperasi
+Route::get('/anggota/data/{id}', [AnggotaController::class, 'data_anggota']); // Verifikasi OTP yang diterima koperasi
 
 Route::prefix('wilayah')->group(function () {
     Route::get('/provinsi', [WilayahController::class, 'province']); // Routing menampilkan provinsi

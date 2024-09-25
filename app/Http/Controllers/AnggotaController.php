@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\LinkMail;
+use App\Services\GoogleCloudStorageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -12,6 +13,25 @@ use Illuminate\Support\Facades\Session;
 
 class AnggotaController extends Controller
 {
+    protected $gcsService;
+
+    public function __construct(GoogleCloudStorageService $gcsService)
+    {
+        $this->gcsService = $gcsService;
+    }
+    // Fungsi untuk mengambil signed URL dari link yang disimpan di database
+    private function generateSignedUrlFromLink($fileUrl)
+    {
+        // Ekstrak nama file dari URL (https://www.googleapis.com/storage/v1/b/registrasi/o/ diikuti oleh nama file)
+        $parsedUrl = parse_url($fileUrl);
+
+        // Decode path dan ambil bagian setelah "/o/" sebagai nama file
+        $filePath = urldecode(basename($parsedUrl['path']));
+
+        // Generate signed URL menggunakan nama file yang diekstrak
+        return $this->gcsService->generateSignedUrl($filePath);
+    }
+
     //
     // public function insert_anggota(Request $request)
     // {
@@ -101,6 +121,9 @@ class AnggotaController extends Controller
                     'nis' => $nis,
                     'otp' => $otp,
                 ];
+                // ====================================================================================================================================
+                // Syntax Pengiriman OTP Zenziva
+                // ====================================================================================================================================
                 $userkey = 'edf78cfcaac1';
                 $passkey = 'b4e14f4a4f695c1cd3f37259';
                 $telepon =  $anggota['nomor_hp'];
@@ -122,6 +145,10 @@ class AnggotaController extends Controller
                 ));
                 $results = json_decode(curl_exec($curlHandle), true);
                 curl_close($curlHandle);
+                // ====================================================================================================================================
+                // End Pengiriman OTP
+                // ====================================================================================================================================
+
                 // $details = [
                 //     'title' => 'Link Registrasi',
                 //     'content' => 'Selamat! Akun koperasi anda berhasil terverifikasi',
@@ -174,6 +201,33 @@ class AnggotaController extends Controller
         }
     }
 
+    //Function untuk mengambil url dokumen-dokumen tiap-tiap koperasi
+    public function data_anggota($id)
+    {
+        try {
+            $koperasi = DB::table('tbl_anggota')->where('id', $id)->first();
+            if (!$koperasi) {
+                return response()->json([
+                    'response_code' => "01",
+                    'response_message' => 'Data Anggota Tidak Ditemukan!',
+                ], 400);
+            }
+            $documents = [
+                'selfie' => $koperasi->selfie ? $this->generateSignedUrlFromLink($koperasi->selfie) : null,
+                'ktp' => $koperasi->ktp ? $this->generateSignedUrlFromLink($koperasi->ktp) : null,
+            ];
+            return response()->json([
+                'response_code' => "00",
+                'response_message' => $documents,
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'response_code' => "01",
+                'response_message' => $th->getMessage(),
+            ], 500);
+        }
+    }
+
     public function update_insert_anggota(Request $request, $id_anggota)
     {
         DB::beginTransaction();
@@ -189,7 +243,9 @@ class AnggotaController extends Controller
                 'jenis_kelamin' => 'required',
                 'anggotaKeluarga' => 'required|array',
                 // 'pendidikanData' => 'required|array',
-                // 'pekerjaanData' => 'required|array',
+                // 'pekerjaanData' => 'required|array',`
+                'selfie' => 'required',
+                'ktp' => 'required',
                 'kelurahan' => 'required',
                 'kecamatan' => 'required',
                 'kota' => 'required',
@@ -205,28 +261,9 @@ class AnggotaController extends Controller
                 'email' => 'required|email',
             ]);
 
-            // Convert Base64 to Image
-            // Simpan foto selfie
-            $selfie_base64 = $request->selfie;
-            $selfie_extension = 'png';
-            $selfie_name = time() . 'anggota.' . $selfie_extension;
-            $selfie_folder = '/anggota/selfie/';
-            $selfie_path = public_path() . $selfie_folder . $selfie_name;
-            // $logo_path = public_path().'/images' public_path($logo_folder . $logo_name);
-            file_put_contents($selfie_path, base64_decode($selfie_base64));
-
-            // Simpan foto selfie
-            $ktp_base64 = $request->ktp;
-            $ktp_extension = 'png';
-            $ktp_name = time() . 'anggota.' . $ktp_extension;
-            $ktp_folder = '/anggota/ktp/';
-            $ktp_path = public_path() . $ktp_folder . $ktp_name;
-            // $logo_path = public_path().'/images' public_path($logo_folder . $logo_name);
-            file_put_contents($ktp_path, base64_decode($ktp_base64));
-
             // simpan url
-            $selfieUrl = $selfie_folder . $selfie_name;
-            $ktpUrl = $ktp_folder . $ktp_name;
+            $selfieUrl = $request->selfie;
+            $ktpUrl = $request->ktp;
             $nama_lengkap = explode(' ', $request->nama_lengkap);
             $dua_kata_pertama = implode(' ', array_slice($nama_lengkap, 0, 2));
             $username = $dua_kata_pertama  . str_pad(rand(0, 2), 2, '0', STR_PAD_LEFT);
@@ -306,6 +343,9 @@ class AnggotaController extends Controller
                     'response_message' => 'Gagal simpan data Pekerjaan!',
                 ], 400);
             }
+            // ====================================================================================================================================
+            // Syntax Pengiriman OTP Zenziva
+            // ====================================================================================================================================
             $userkey = 'edf78cfcaac1';
             $passkey = 'b4e14f4a4f695c1cd3f37259';
             $telepon =  $request->nomor_hp;
@@ -327,6 +367,9 @@ class AnggotaController extends Controller
             ));
             $results = json_decode(curl_exec($curlHandle), true);
             curl_close($curlHandle);
+            // ====================================================================================================================================
+            // End Pengiriman OTP
+            // ====================================================================================================================================
             DB::commit();
             return response()->json([
                 'response_code' => "00",

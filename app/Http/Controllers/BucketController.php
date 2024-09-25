@@ -86,8 +86,17 @@ class BucketController extends Controller
             $fileWithPath = $folder . $fileName; // Path di bucket, contoh: koperasi/sertifikat_koperasi/123456789.jpg
             // Upload file ke Google Cloud Storage
             $result = $this->storageService->uploadFile($filePath, $fileWithPath);
+        }else if($request->jenis=='selfie'){
+            $folder = 'anggota/selfie/';
+            $fileWithPath = $folder . $fileName; // Path di bucket, contoh: koperasi/sertifikat_koperasi/123456789.jpg
+            // Upload file ke Google Cloud Storage
+            $result = $this->storageService->uploadFile($filePath, $fileWithPath);
+        }else if($request->jenis=='ktp'){
+            $folder = 'anggota/ktp/';
+            $fileWithPath = $folder . $fileName; // Path di bucket, contoh: koperasi/sertifikat_koperasi/123456789.jpg
+            // Upload file ke Google Cloud Storage
+            $result = $this->storageService->uploadFile($filePath, $fileWithPath);
         }
-
         return response()->json([
             'message' => 'File uploaded successfully',
             'data' => $result,
