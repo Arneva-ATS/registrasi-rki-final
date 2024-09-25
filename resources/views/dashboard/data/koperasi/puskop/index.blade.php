@@ -375,7 +375,7 @@
             .then(response=>response.json())
             .then(data=>{
                 console.log(data);
-                window.open(data.response_message.sertifikat_koperasi, 'sertifikatWindowed', 'width=800,height=600,top=100,left=100,resizable=yes');
+                window.open(data.response_message.sertifikat, 'sertifikatWindowed', 'width=800,height=600,top=100,left=100,resizable=yes');
             })
         }
 
