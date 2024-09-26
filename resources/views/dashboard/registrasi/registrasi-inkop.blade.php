@@ -896,8 +896,6 @@
         const documentSIUP = document.getElementById('doc_siup');
         const documentSertifikat = document.getElementById('doc_sertifikat_koperasi');
         const documentSPKK = document.getElementById('doc_spkk');
-        const previewKtpKetua = document.getElementById('preview-ktp-ketua');
-        const previewKtpPengawas = document.getElementById('preview-ktp-pengawas');
         const previewLogo = document.getElementById('preview-logo');
         const previewNpwp = document.getElementById('preview-npwp');
         window.addEventListener("load", () => {
@@ -1402,7 +1400,7 @@
                 formData.append('jenis','logo');
 
                 // Kirim file ke bucket storage melalui API Laravel
-                fetch('http://127.0.0.1:8000/api/file/upload', {
+                fetch('/api/file/upload', {
                         method: 'POST',
                         body: formData,
                     })
@@ -1434,7 +1432,7 @@
                 reader.readAsDataURL(file); // Baca file untuk preview
 
                 // Upload file ke server menggunakan fetch
-                fetch('http://127.0.0.1:8000/api/file/upload', {
+                fetch('/api/file/upload', {
                     method: 'POST',
                     body: formData,
                 })
@@ -1460,7 +1458,7 @@
                 formData.append('jenis','skk');
 
                 // Kirim file ke server melalui API Laravel atau Bucket Storage
-                fetch('http://127.0.0.1:8000/api/file/upload', {
+                fetch('/api/file/upload', {
                     method: 'POST',
                     body: formData,
                 })
@@ -1487,7 +1485,7 @@
                 formData.append('jenis','akta_pendirian');
 
                 // Kirim file ke server melalui API Laravel atau Bucket Storage
-                fetch('http://127.0.0.1:8000/api/file/upload', {
+                fetch('/api/file/upload', {
                     method: 'POST',
                     body: formData,
                 })
@@ -1514,7 +1512,7 @@
                 formData.append('jenis','akta_perubahan');
 
                 // Kirim file ke server melalui API Laravel atau Bucket Storage
-                fetch('http://127.0.0.1:8000/api/file/upload', {
+                fetch('/api/file/upload', {
                     method: 'POST',
                     body: formData,
                 })
@@ -1541,7 +1539,7 @@
                 formData.append('jenis', 'siup'); // Tambahkan file ke FormData
 
                 // Kirim file ke server melalui API Laravel atau Bucket Storage
-                fetch('http://127.0.0.1:8000/api/file/upload', {
+                fetch('/api/file/upload', {
                     method: 'POST',
                     body: formData,
                 })
@@ -1567,7 +1565,7 @@
                 formData.append('jenis','spkk');
 
                 // Kirim file ke server melalui API Laravel atau Bucket Storage
-                fetch('http://127.0.0.1:8000/api/file/upload', {
+                fetch('/api/file/upload', {
                     method: 'POST',
                     body: formData,
                 })
@@ -1593,7 +1591,7 @@
                 formData.append('jenis','skdu');
 
                 // Kirim file ke server melalui API Laravel atau Bucket Storage
-                fetch('http://127.0.0.1:8000/api/file/upload', {
+                fetch('/api/file/upload', {
                     method: 'POST',
                     body: formData,
                 })
@@ -1619,7 +1617,7 @@
                 formData.append('file', file); // Tambahkan file ke FormData
                 formData.append('jenis','sertifikat');
                 // Kirim file ke server melalui API Laravel atau Bucket Storage
-                fetch('http://127.0.0.1:8000/api/file/upload', {
+                fetch('/api/file/upload', {
                     method: 'POST',
                     body: formData,
                 })

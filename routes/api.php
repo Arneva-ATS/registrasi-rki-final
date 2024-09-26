@@ -42,6 +42,10 @@ Route::prefix('register')->group(function () {
     Route::post('/koperasi/insert-induk', [KoperasiController::class, 'insert_inkop']); // Routing untuk insert atau menambahkan koperasi induk oleh RKI
 })->name('register');
 
+// Update profil koperasi
+Route::patch("/setting/update-koperasi/{id_koperasi}", [KoperasiController::class, 'update_koperasi']); // Routing update profil dan data koperasi
+Route::patch("/setting/update_password/{id_koperasi}", [KoperasiController::class, 'change_password']); // Routing ubah password
+
 Route::get('/koperasi/verifikasi-otp/{otp}/{nis}', [KoperasiController::class, 'verifikasi_otp']); // Verifikasi OTP yang diterima koperasi
 Route::get('/anggota/verifikasi-otp/{otp}/{nis}', [AnggotaController::class, 'verifikasi_otp']); // Verifikasi OTP yang diterima anggota
 Route::post('/file/upload', [BucketController::class, 'upload']);

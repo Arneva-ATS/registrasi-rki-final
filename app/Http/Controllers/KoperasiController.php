@@ -33,6 +33,121 @@ class KoperasiController extends Controller
     }
 
     //Update seluruh data koperasi
+    public function update_koperasi(Request $request, $id_koperasi)
+    {
+
+        DB::beginTransaction();
+
+        try {
+            // // URL atau path file untuk disimpan di database
+            $logoUrl = $request->logo;
+            $npwpUrl = $request->image_npwp;
+            $dokumenSIUPUrl = $request->doc_siup;
+            $dokumenAktaPendirianUrl = $request->doc_akta_pendirian;
+            $dokumenAktaPerubahanUrl = $request->doc_akta_perubahan;
+            $dokumenSKKUrl = $request->doc_sk_kemenkumham;
+            $dokumenSPKUMUrl = $request->doc_spkum;
+            $dokumenSKDomisiliUrl = $request->doc_sk_domisili;
+            $dokumenSertifikatUrl = $request->doc_sertifikat_koperasi;
+
+            // Menyimpan seluruh data koperasi yang direquest kedalam array
+            $koperasiData = [
+                'nama_koperasi' => $request->nama_koperasi,
+                'singkatan_koperasi' => $request->singkatan_koperasi,
+                'email_koperasi' => $request->email,
+                'no_phone' => $request->no_telp,
+                'hp_wa' => $request->no_wa,
+                'hp_fax' => $request->no_fax,
+                'url_website' => $request->web,
+                'username' => $request->username,
+                'bidang_koperasi' => $request->bidang_koperasi,
+                'alamat' => $request->alamat,
+                'kode_pos' => $request->kode_pos,
+                'no_akta_pendirian' => $request->no_akta_pendirian,
+                'tanggal_akta_pendirian' => $request->tanggal_akta_pendirian,
+                'no_sk_kemenkumham' => $request->no_skk,
+                'tanggal_sk_kemenkumham' => $request->tanggal_skk,
+                'no_akta_perubahan' => $request->no_akta_perubahan,
+                'tanggal_akta_perubahan' => $request->tanggal_akta_perubahan,
+                'no_spkum' => $request->no_spkk,
+                'tanggal_spkum' => $request->tanggal_spkk,
+                'no_siup' => $request->no_siup,
+                'masa_berlaku_siup' => $request->masa_berlaku_siup,
+                'no_sk_domisili' => $request->no_skdu,
+                'masa_berlaku_sk_domisili' => $request->masa_berlaku_skdu,
+                'no_npwp' => $request->no_npwp,
+                'no_pkp' => $request->no_pkp,
+                'no_sertifikat_koperasi' => $request->no_sertifikat,
+                'image_logo' => $logoUrl,
+                'image_npwp' => $npwpUrl,
+                'doc_siup' => $dokumenSIUPUrl,
+                'doc_akta_pendirian' => $dokumenAktaPendirianUrl,
+                'doc_akta_perubahan' => $dokumenAktaPerubahanUrl,
+                'doc_sk_kemenkumham' => $dokumenSKKUrl,
+                'doc_spkum' => $dokumenSPKUMUrl,
+                'doc_sk_domisili' => $dokumenSKDomisiliUrl,
+                'doc_sertifikat_koperasi' => $dokumenSertifikatUrl,
+            ];
+
+            // Mendapatkan id koperasi
+            $koperasiId = DB::table('tbl_koperasi')->where('id', $id_koperasi)->update($koperasiData);
+
+            // Jika id koperasi tidak ditemukan
+            // if (!$koperasiId) {
+            //     throw new \Exception('Gagal Update Data!');
+            // }
+
+            DB::commit();
+            return response()->json([
+                'response_code' => "00",
+                'response_message' => 'Sukses Mengubah Data',
+            ], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return response()->json([
+                'response_code' => "01",
+                'response_message' => $th->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function change_password(Request $request, $id_koperasi){
+        DB::beginTransaction();
+        try{
+            $request->validate([
+                'password_sekarang'=>'required',
+                'password_baru' => 'required',
+                'konfirmasi_password'=>'required'
+            ]);
+            $password_baru = $request->password_baru;
+            $konfirmasi_password = $request->konfirmasi_password;
+            $password_sekarang = $request->password_sekarang;
+
+            $koperasi = DB::table('tbl_koperasi')->where('id', $id_koperasi)->first();
+            $password = $koperasi->password;
+            if($password_sekarang != $password){
+                throw new \Exception('Password Lama Salah!');
+            } else if($konfirmasi_password != $password_baru){
+                throw new \Exception('Konfirmasi Password Salah!');
+            }
+            DB::table('tbl_koperasi')->where('id', $id_koperasi)->update(['password'=>$password_baru]);
+
+            DB::commit();
+            return response()->json([
+                'response_code' => "00",
+                'response_message' => 'Berhasil Ganti Password',
+            ], 200);
+        }catch(\Throwable $th){
+            DB::rollBack();
+
+            return response()->json([
+                'response_code' => "01",
+                'response_message' => $th->getMessage(),
+            ], 400);
+        }
+    }
+
     public function update_koperasi_rki(Request $request, $id_koperasi)
     {
 
@@ -209,7 +324,6 @@ class KoperasiController extends Controller
             ], 400);
         }
     }
-
     // Function untuk verifikasi otp koperasi
     public function verifikasi_otp($otp, $nis)
     {
@@ -673,7 +787,31 @@ class KoperasiController extends Controller
         $list_simpanan =  DB::table('tbl_simpanan')->where('id_koperasi', '=', $id)->get();
         return view('dashboard.data.koperasi.simpin.simpanan', compact('id', 'username', 'password', 'tingkatan', 'list_simpanan'));
     }
-
+    public function setting()
+    {
+        $id = Session::get('id_koperasi');
+        $username = Session::get('username');
+        $password = Session::get('password');
+        $tingkatan = Session::get('tingkatan');
+        $id_inkop = Session::get('id_inkop');
+        $id_puskop = Session::get('id_puskop');
+        $id_primkop = Session::get('id_primkop');
+        $koperasi =  DB::table('tbl_koperasi')->where('id', '=', $id)->first();
+        // return dd($koperasi);
+        return view('dashboard.data.koperasi.setting.index', compact('id', 'username', 'password', 'tingkatan', 'koperasi'));
+    }
+    public function ubah_password()
+    {
+        $id = Session::get('id_koperasi');
+        $username = Session::get('username');
+        $password = Session::get('password');
+        $tingkatan = Session::get('tingkatan');
+        $id_inkop = Session::get('id_inkop');
+        $id_puskop = Session::get('id_puskop');
+        $id_primkop = Session::get('id_primkop');
+        // return dd($koperasi);
+        return view('dashboard.data.koperasi.ubah_password.index', compact('id', 'username', 'password', 'tingkatan'));
+    }
     public function tambah_simpanan()
     {
         $id = Session::get('id_koperasi');

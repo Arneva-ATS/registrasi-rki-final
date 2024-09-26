@@ -29,6 +29,7 @@
  <link href="{{asset('/assets/dashboard/src/assets/css/light/dashboard/dash_1.css')}}" rel="stylesheet" type="text/css" />
  <link href="{{asset('/assets/dashboard/src/assets/css/dark/dashboard/dash_1.css')}}" rel="stylesheet" type="text/css" />
  <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+ <link rel="stylesheet" href="/assets/dashboard/src/plugins/src/sweetalerts2/sweetalerts2.css">
 
  <!-- BEGIN PAGE LEVEL STYLES -->
  <link rel="stylesheet" type="text/css" href="{{asset('/assets/dashboard/src/plugins/src/table/datatable/datatables.css')}}">

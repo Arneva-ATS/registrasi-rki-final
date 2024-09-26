@@ -44,6 +44,7 @@ if (config('app.env') === 'production') {
         Route::get('/tambah_simpanan', [KoperasiController::class, 'tambah_simpanan']);
 
         Route::get('/logout', [KoperasiController::class, 'logout']);
+        Route::get('/setting', [KoperasiController::class, 'setting']);
 
         Route::get('/dashboard-new', function () {
             return view('dashboard.index');
@@ -317,6 +318,8 @@ if (config('app.env') === 'production') {
     Route::get('/tambah_simpanan', [KoperasiController::class, 'tambah_simpanan']);
 
     Route::get('/logout', [KoperasiController::class, 'logout']);
+    Route::get('/setting', [KoperasiController::class, 'setting']);
+    Route::get('/ubah-password', [KoperasiController::class, 'ubah_password']);
 
     Route::get('/dashboard-new', function () {
         return view('dashboard.index');
