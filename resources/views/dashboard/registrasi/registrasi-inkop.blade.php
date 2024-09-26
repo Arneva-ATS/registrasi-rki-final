@@ -214,7 +214,7 @@
                                                             <div class="form">
                                                                 <button type="button" onclick="tambahPuskopBtn()"
                                                                     class="btn btn-success mb-3">Tambah Data</button>
-                                                                <div>
+                                                                <div class="table-responsive">
                                                                     <table class="table">
                                                                         <thead>
                                                                             <tr>
@@ -448,7 +448,7 @@
                                                                                 onclick="tambahPengawasBtn()"
                                                                                 class="btn btn-success mb-3">Tambah
                                                                                 Data</button>
-                                                                            <div>
+                                                                            <div class="table-responsive">
                                                                                 <table class="table">
                                                                                     <thead>
                                                                                         <tr>

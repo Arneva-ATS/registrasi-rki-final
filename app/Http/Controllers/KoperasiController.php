@@ -288,7 +288,7 @@ class KoperasiController extends Controller
             $userkey = 'edf78cfcaac1';
             $passkey = 'b4e14f4a4f695c1cd3f37259';
             $telepon = $request->pengurusData[0]['nomor_hp'];
-            $message = "Selamat koperasi Anda berhasil terverifikasi. Berikut username dan password untuk login:\nusername: " . $username . "\npassword: " . $password;
+            $message = "Selamat akun koperasi Anda berhasil terverifikasi. Berikut username dan password untuk login:\nusername: " . $username . "\npassword: " . $password;
             $url = 'https://console.zenziva.net/masking/api/sendsms/';
             $curlHandle = curl_init();
             curl_setopt($curlHandle, CURLOPT_URL, $url);
@@ -459,7 +459,7 @@ class KoperasiController extends Controller
                     $userkey = 'edf78cfcaac1';
                     $passkey = 'b4e14f4a4f695c1cd3f37259';
                     $telepon = $koperasi['nomor_ketua'];
-                    $OTPmessage = 'Berikut OTP registrasi Anda: ' . $otp . "\nGunakan Link berikut untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/puskop/" . $nis;
+                    $OTPmessage = 'Mohon jaga kerahasiaan kode OTP Anda. Berikut OTP registrasi: ' . $otp . "\nGunakan link berikut ini untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/puskop/" . $nis;
                     $url = 'https://console.zenziva.net/masking/api/sendOTP/';
                     $curlHandle = curl_init();
                     curl_setopt($curlHandle, CURLOPT_URL, $url);
@@ -482,7 +482,7 @@ class KoperasiController extends Controller
                     $userkey = 'edf78cfcaac1';
                     $passkey = 'b4e14f4a4f695c1cd3f37259';
                     $telepon = $koperasi['nomor_ketua'];
-                    $OTPmessage = 'Berikut OTP registrasi Anda: ' . $otp . "\nGunakan Link berikut untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/primkop/" . $nis;
+                    $OTPmessage = 'Mohon jaga kerahasiaan kode OTP Anda. Berikut OTP registrasi: ' . $otp . "\nGunakan link berikut ini untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/primkop/" . $nis;
                     $url = 'https://console.zenziva.net/masking/api/sendOTP/';
                     $curlHandle = curl_init();
                     curl_setopt($curlHandle, CURLOPT_URL, $url);
@@ -561,7 +561,7 @@ class KoperasiController extends Controller
             $userkey = 'edf78cfcaac1';
             $passkey = 'b4e14f4a4f695c1cd3f37259';
             $telepon =  $request->nomerKetua;
-            $OTPmessage = 'Berikut OTP registrasi Anda: ' . $otp . "\nGunakan Link berikut untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/inkop/" . $nis;
+            $OTPmessage = 'Mohon jaga kerahasiaan kode OTP Anda. Berikut OTP registrasi: ' . $otp . "\nGunakan link berikut ini untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/inkop/" . $nis;
             $url = 'https://console.zenziva.net/masking/api/sendOTP/';
             $curlHandle = curl_init();
             curl_setopt($curlHandle, CURLOPT_URL, $url);
@@ -787,7 +787,7 @@ class KoperasiController extends Controller
         $list_simpanan =  DB::table('tbl_simpanan')->where('id_koperasi', '=', $id)->get();
         return view('dashboard.data.koperasi.simpin.simpanan', compact('id', 'username', 'password', 'tingkatan', 'list_simpanan'));
     }
-    public function setting()
+    public function profil()
     {
         $id = Session::get('id_koperasi');
         $username = Session::get('username');
@@ -798,7 +798,7 @@ class KoperasiController extends Controller
         $id_primkop = Session::get('id_primkop');
         $koperasi =  DB::table('tbl_koperasi')->where('id', '=', $id)->first();
         // return dd($koperasi);
-        return view('dashboard.data.koperasi.setting.index', compact('id', 'username', 'password', 'tingkatan', 'koperasi'));
+        return view('dashboard.data.koperasi.profil.index', compact('id', 'username', 'password', 'tingkatan', 'koperasi'));
     }
     public function ubah_password()
     {
