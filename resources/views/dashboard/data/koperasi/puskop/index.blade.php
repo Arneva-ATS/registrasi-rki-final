@@ -9,9 +9,9 @@
 @section('content')
     <div class="row">
         <p class="mt-2 text-white">
-            @if(Session::get('tingkatan') !== 'rki')
+            {{-- @if(Session::get('tingkatan') !== 'rki')
             <a href="/tambah_puskop" class="btn btn-primary"> Tambah Puskop </a>
-            @endif
+            @endif --}}
         </p>
 
         <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">

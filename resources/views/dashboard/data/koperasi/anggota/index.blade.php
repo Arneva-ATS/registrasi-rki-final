@@ -8,9 +8,9 @@
 
 @section('content')
     <div class="row">
-        <p class="mt-2">
+        {{-- <p class="mt-2">
             <a href="/tambah_anggota" class="btn btn-primary"> Tambah Anggota </a>
-        </p>
+        </p> --}}
         <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
             <div class="widget-content widget-content-area br-8">
                 <table id="zero-config" class="table dt-table-hover" style="width:100%">
