@@ -9,7 +9,7 @@
             <div class="widget-content widget-content-area br-8 p-3">
                 <form class="row g-3 needs-validation" novalidate entype="multipart/form-data">
                     <div class="form-group">
-                        <label for="password_sekarang" class="form-label">Password Sekarang</label>
+                        <label for="password_sekarang" class="form-label">Password Lama</label>
                         <input type="text" name="password_sekarang" id="password_sekarang" class="form-control"
                             placeholder="Masukan Nama Koperasi" />
                     </div>

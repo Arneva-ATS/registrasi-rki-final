@@ -52,7 +52,10 @@
                     <div class="col-0 col-md-2"></div>
                     <div class="col-12 col-md-4">
                         <div class="text-right login">
-                            Login to your Account
+                            Login Akun Koperasi
+                        </div>
+                        <div class="text-right text-white">
+                            Login sebagai anggota? <a href="/member/login" class="text-white text-underline">Klik disini</a> 
                         </div>
                         <!-- Authentication card start -->
                         <form class="md-float-material form-material mt-3" name="frmLogin" id="frmLogin" method="POST" action="/dologin">

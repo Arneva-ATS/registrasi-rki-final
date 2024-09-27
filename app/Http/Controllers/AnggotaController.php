@@ -127,7 +127,7 @@ class AnggotaController extends Controller
                 $userkey = 'edf78cfcaac1';
                 $passkey = 'b4e14f4a4f695c1cd3f37259';
                 $telepon =  $anggota['nomor_hp'];
-                $OTPmessage = 'Berikut OTP registrasi Anda: ' . $otp . "\nGunakan Link berikut untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/anggota/" . $nis;
+                $OTPmessage = 'Mohon jaga kerahasiaan kode OTP Anda. Berikut OTP registrasi: ' . $otp . "\nGunakan link berikut ini untuk melanjutkan pendafataran https://registrasi.rkicoop.co.id/pendaftaran/anggota/" . $nis;
                 $url = 'https://console.zenziva.net/masking/api/sendOTP/';
                 $curlHandle = curl_init();
                 curl_setopt($curlHandle, CURLOPT_URL, $url);
