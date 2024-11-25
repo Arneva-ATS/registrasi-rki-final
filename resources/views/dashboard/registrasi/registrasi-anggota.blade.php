@@ -177,20 +177,23 @@
                                                             <div class="form">
                                                                 <div class="row">
                                                                     <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label for="selfie">Foto Pribadi</label>
-                                                                            <img src="/assets/images/selfie.JPG"
-                                                                                alt="selfie" width="150"
-                                                                                height="150"
-                                                                                class="d-block mx-auto mb-3"
-                                                                                style="border-radius: 10%" />
-                                                                            <input type="file" name="selfie"
-                                                                                id="selfie"
-                                                                                class="form-control form-control px-4 mb-3"
-                                                                                style=" height: auto !important; padding-top: 15px !important; padding-bottom: 15px !important;"
-                                                                                accept="image/jpeg, image/png, image/jpg"
-                                                                                required />
-                                                                        </div>
+                                                                        <form action="/api/register/anggota/update-insert-anggota/124" method="POST" enctype="multipart/form-data">
+                                                                            @csrf
+                                                                            <div class="form-group">
+                                                                                <label for="selfie">Foto Pribadi</label>
+                                                                                <img src="/assets/images/selfie.JPG"
+                                                                                    alt="selfie" width="150"
+                                                                                    height="150"
+                                                                                    class="d-block mx-auto mb-3"
+                                                                                    style="border-radius: 10%" />
+                                                                                <input type="file" name="selfie"
+                                                                                    id="selfie"
+                                                                                    class="form-control form-control px-4 mb-3"
+                                                                                    style=" height: auto !important; padding-top: 15px !important; padding-bottom: 15px !important;"
+                                                                                    accept="image/jpeg, image/png, image/jpg"
+                                                                                    required />
+                                                                            </div>
+                                                                        </form>
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <div class="form-group">
@@ -787,7 +790,7 @@
                                                                             <input type="text"
                                                                                 class="form-control mb-3"
                                                                                 id="pendidikan_pasangan"
-                                                                                placeholder="Tanggal Lahir">
+                                                                                placeholder="Pendidikan">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1213,7 +1216,7 @@
         }
 
         function editPekerjaan(index) {
-            const pekerjaan = PekerjaanData[index];
+            const pekerjaan = pekerjaanData[index];
             Swal.fire({
                 title: 'Edit Pekerjaan',
                 html: `
@@ -1288,7 +1291,7 @@
                         <td>${pendidikan.tahun_lulus}</td>
                         <td>
                             <button class="btn btn-warning btn-sm" onclick="editPendidikan(${index})">Edit</button>
-                            <button class="btn btn-danger btn-sm" onclick="deletependidikan(${index})">Delete</button>
+                            <button class="btn btn-danger btn-sm" onclick="deletePendidikan(${index})">Delete</button>
                         </td>
                     `;
                 pendidikanList.appendChild(row);
@@ -1431,7 +1434,7 @@
                     .then(data => {
                         console.log('File uploaded successfully:', data);
                         alert('File uploaded successfully!');
-                        urlLogo = data.data.selfLink;
+                        urlSelfie  = data.data.selfLink;
                     })
                     .catch(error => {
                         console.error('Error:', error);
@@ -1457,7 +1460,7 @@
                 formData.append('file', file); // Tambahkan file ke FormData
                 formData.append('jenis','ktp');
 
-                // Kirim file ke bucket storage melalui API Laravel
+                // Kirim file ke bucket storage melalui API Laravel 
                 fetch('http://127.0.0.1:8000/api/file/upload', {
                         method: 'POST',
                         body: formData,
@@ -1466,7 +1469,7 @@
                     .then(data => {
                         console.log('File uploaded successfully:', data);
                         alert('File uploaded successfully!');
-                        urlLogo = data.data.selfLink;
+                        urlKtp = data.data.selfLink;
                     })
                     .catch(error => {
                         console.error('Error:', error);
