@@ -177,20 +177,23 @@
                                                             <div class="form">
                                                                 <div class="row">
                                                                     <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label for="selfie">Foto Pribadi</label>
-                                                                            <img src="/assets/images/selfie.JPG"
-                                                                                alt="selfie" width="150"
-                                                                                height="150"
-                                                                                class="d-block mx-auto mb-3"
-                                                                                style="border-radius: 10%" />
-                                                                            <input type="file" name="selfie"
-                                                                                id="selfie"
-                                                                                class="form-control form-control px-4 mb-3"
-                                                                                style=" height: auto !important; padding-top: 15px !important; padding-bottom: 15px !important;"
-                                                                                accept="image/jpeg, image/png, image/jpg"
-                                                                                required />
-                                                                        </div>
+                                                                        <form action="/api/register/anggota/update-insert-anggota/124" method="POST" enctype="multipart/form-data">
+                                                                            @csrf
+                                                                            <div class="form-group">
+                                                                                <label for="selfie">Foto Pribadi</label>
+                                                                                <img src="/assets/images/selfie.JPG"
+                                                                                    alt="selfie" width="150"
+                                                                                    height="150"
+                                                                                    class="d-block mx-auto mb-3"
+                                                                                    style="border-radius: 10%" />
+                                                                                <input type="file" name="selfie"
+                                                                                    id="selfie"
+                                                                                    class="form-control form-control px-4 mb-3"
+                                                                                    style=" height: auto !important; padding-top: 15px !important; padding-bottom: 15px !important;"
+                                                                                    accept="image/jpeg, image/png, image/jpg"
+                                                                                    required />
+                                                                            </div>
+                                                                        </form>
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <div class="form-group">
@@ -787,7 +790,7 @@
                                                                             <input type="text"
                                                                                 class="form-control mb-3"
                                                                                 id="pendidikan_pasangan"
-                                                                                placeholder="Tanggal Lahir">
+                                                                                placeholder="Pendidikan">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1213,7 +1216,7 @@
         }
 
         function editPekerjaan(index) {
-            const pekerjaan = PekerjaanData[index];
+            const pekerjaan = pekerjaanData[index];
             Swal.fire({
                 title: 'Edit Pekerjaan',
                 html: `
@@ -1221,7 +1224,7 @@
                         <input id="swal-input2" class="swal2-input value="${pekerjaan.alamat_perusahaan}" placeholder="Masukan Alamat Perusahaan">
                         <input id="swal-input3" type="date" class="swal2-input" value="${pekerjaan.periode_kerja_awal}" placeholder="Masukan Periode Awal">
                         <input id="swal-input4" type="date" class="swal2-input" value="${pekerjaan.periode_kerja_akhir}" placeholder="Masukan Periode Akhir">
-                        <input id="swal-input5" type="date" class="swal2-input" value="${pekerjaan.gaji_terakhir}" placeholder="Masukan Gaji Terakhir">
+                        <input id="swal-input5"  class="swal2-input" value="${pekerjaan.gaji_terakhir}" placeholder="Masukan Gaji Terakhir">
         `,
                 showCancelButton: true,
                 confirmButtonText: 'Update',
@@ -1288,7 +1291,7 @@
                         <td>${pendidikan.tahun_lulus}</td>
                         <td>
                             <button class="btn btn-warning btn-sm" onclick="editPendidikan(${index})">Edit</button>
-                            <button class="btn btn-danger btn-sm" onclick="deletependidikan(${index})">Delete</button>
+                            <button class="btn btn-danger btn-sm" onclick="deletePendidikan(${index})">Delete</button>
                         </td>
                     `;
                 pendidikanList.appendChild(row);
@@ -1359,6 +1362,7 @@
                 `,
                 showCancelButton: true,
                 confirmButtonText: 'Update',
+                cancelButtonText: 'Batal',
                 preConfirm: () => {
                     const nama_institusi = document.getElementById('swal-input1').value;
                     const jurusan = document.getElementById('swal-input2').value;
@@ -1383,11 +1387,11 @@
                         tahun_lulus,
                     } = result.value;
 
-                    pendidikanData.push({
+                    pendidikanData[index] = {
                         nama_institusi,
                         jurusan,
                         tahun_lulus,
-                    });
+                    };
 
                     renderPendidikan();
                     Swal.fire({
@@ -1431,7 +1435,7 @@
                     .then(data => {
                         console.log('File uploaded successfully:', data);
                         alert('File uploaded successfully!');
-                        urlLogo = data.data.selfLink;
+                        urlSelfie  = data.data.selfLink;
                     })
                     .catch(error => {
                         console.error('Error:', error);
@@ -1457,7 +1461,7 @@
                 formData.append('file', file); // Tambahkan file ke FormData
                 formData.append('jenis','ktp');
 
-                // Kirim file ke bucket storage melalui API Laravel
+                // Kirim file ke bucket storage melalui API Laravel 
                 fetch('http://127.0.0.1:8000/api/file/upload', {
                         method: 'POST',
                         body: formData,
@@ -1466,7 +1470,7 @@
                     .then(data => {
                         console.log('File uploaded successfully:', data);
                         alert('File uploaded successfully!');
-                        urlLogo = data.data.selfLink;
+                        urlKtp = data.data.selfLink;
                     })
                     .catch(error => {
                         console.error('Error:', error);
